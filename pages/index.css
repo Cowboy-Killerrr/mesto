@@ -1,0 +1,16 @@
+/* VENDOR */
+@import url("../vendor/normalize.css");
+@import url("../vendor/fonts.css");
+@import url("../vendor/variables.css");
+
+/* REUSE */
+/* @import url("../blocks/block/block.css"); */
+
+/* PAGE */
+@import url("../blocks/page/page.css");
+
+/* header */
+@import url("../blocks/header/header.css");
+
+/* footer */
+@import url("../blocks/footer/footer.css");
