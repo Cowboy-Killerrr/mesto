@@ -1,7 +1,5 @@
 .profile {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 40px 40px 50px 40px;
+  padding: 40px 0 50px 0;
   display: grid;
   grid-template-columns: 120px 1fr 150px;
   gap: 30px;
@@ -102,7 +100,7 @@
 
 @media screen and (max-width: 425px) {
   .profile {
-    padding: 42px 19px 36px 19px;
+    padding: 42px 0 36px 0;
     gap: 0;
   }
 

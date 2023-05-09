@@ -11,5 +11,14 @@
 
   background-color: var(--background);
   color: var(--text);
+
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 40px;
 }
 
+@media screen and (max-width: 425px) {
+  .page {
+    padding: 0;
+  }
+}
