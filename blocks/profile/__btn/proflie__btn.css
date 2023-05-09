@@ -1,0 +1,11 @@
+.proflie__btn {
+  background: transparent;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid var(--text);
+  transition: opacity 0.5s;
+}
+.proflie__btn:hover {
+  opacity: 0.6;
+}

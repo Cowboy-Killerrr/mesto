@@ -1,0 +1,13 @@
+.proflie__btn-edit {
+  background-image: url("../../../images/svg/edit.svg");
+  border: 1px solid var(--text);
+  min-width: 24px;
+  min-height: 24px;
+  margin: 0 0 8px 0;
+}
+@media screen and (max-width: 425px) {
+  .proflie__btn-edit {
+    min-width: 18px;
+    min-height: 18px;
+  }
+}
