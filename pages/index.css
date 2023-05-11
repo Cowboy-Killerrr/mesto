@@ -35,4 +35,5 @@
 @import url("../blocks/gallery/__card-btn/gallery__card-btn.css");
 
 /* footer */
-@import url("../blocks/footer/TESTING.css");
+@import url("../blocks/footer/footer.css");
+@import url("../blocks/footer/__copyright/footer__copyright.css");
