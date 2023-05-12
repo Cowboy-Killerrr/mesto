@@ -1,0 +1,21 @@
+.form__btn_type_submit {
+  background: none;
+  cursor: pointer;
+  border: none;
+  background-color: var(--background);
+  width: 100%;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--text);
+  padding: 14px 0;
+  transition: background-color 0.5s;
+}
+.form__btn_type_submit:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+@media screen and (max-width: 375px) {
+  .form__btn_type_submit {
+    font-size: 14px;
+  }
+}

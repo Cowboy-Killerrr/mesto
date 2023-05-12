@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./pages/index.css" />
-    <script src="./scripts/script.js" defer></script>
     <title>Mesto</title>
   </head>
   <body class="page">
@@ -20,7 +19,7 @@
         <div class="profile__avatar"></div>
         <div class="profile__info">
           <h1 class="profile__name">
-            Жак-Ив Кусто
+            <span class="profile__name-text">Жак-Ив Кусто</span>
             <button class="proflie__btn proflie__btn-edit"></button>
           </h1>
           <p class="profile__description">Исследователь океана</p>
@@ -96,5 +95,32 @@
     <footer class="footer">
       <p class="footer__copyright">&copy; 2023 Mesto Russia</p>
     </footer>
+
+    <!-- popup -->
+    <section class="popup">
+      <div class="popup__container">
+        <button class="popup__btn_type_close"></button>
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <form action="#" class="form">
+          <input
+            type="text"
+            name="”name”"
+            id="”name”"
+            placeholder="Имя"
+            class="form__input form__input_type_name"
+          />
+          <input
+            type="text"
+            name="”job”"
+            id="”job”"
+            placeholder="Род деятельности"
+            class="form__input form__input_type_job"
+          />
+          <button type="submit" class="form__btn_type_submit">Сохранить</button>
+        </form>
+      </div>
+    </section>
+
+    <script src="./scripts/script.js"></script>
   </body>
 </html>
