@@ -1,7 +1,7 @@
 const page = document.querySelector('.page');
 const popup = document.querySelector('.popup');
 
-const profileBtnEdit = document.querySelector('.proflie__btn_edit');
+const profileBtnEdit = document.querySelector('.profile__btn_edit');
 const popupBtnClose = popup.querySelector('.popup__btn');
 const popupBtnSubmit = popup.querySelector('.form__btn');
 
