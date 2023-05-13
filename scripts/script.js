@@ -1,9 +1,9 @@
 const page = document.querySelector('.page');
 const popup = document.querySelector('.popup');
 
-const profileBtnEdit = document.querySelector('.proflie__btn-edit');
-const popupBtnClose = popup.querySelector('.popup__btn_type_close');
-const popupBtnSubmit = popup.querySelector('.form__btn_type_submit');
+const profileBtnEdit = document.querySelector('.proflie__btn_edit');
+const popupBtnClose = popup.querySelector('.popup__btn');
+const popupBtnSubmit = popup.querySelector('.form__btn');
 
 const profileInputName = document.querySelector('.form__input_type_name');
 const profileInputDescription = document.querySelector('.form__input_type_job');

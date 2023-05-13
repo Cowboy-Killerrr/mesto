@@ -1,4 +1,4 @@
-.popup__btn_type_close {
+.popup__btn {
   background: none;
   cursor: pointer;
   border: none;
@@ -13,11 +13,11 @@
   right: -40px;
   transition: opacity 0.5s;
 }
-.popup__btn_type_close:hover {
+.popup__btn:hover {
   opacity: 0.6;
 }
 @media screen and (max-width: 520px) {
-  .popup__btn_type_close {
+  .popup__btn {
     width: 20px;
     height: 20px;
     right: 0;

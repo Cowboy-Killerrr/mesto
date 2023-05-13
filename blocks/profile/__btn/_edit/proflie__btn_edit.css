@@ -1,5 +1,5 @@
-.proflie__btn-edit {
-  background-image: url("../../../images/svg/edit.svg");
+.proflie__btn_edit {
+  background-image: url("../../../../images/svg/edit.svg");
   border: 1px solid var(--text);
   min-width: 24px;
   min-height: 24px;
