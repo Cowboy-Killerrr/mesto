@@ -1,4 +1,4 @@
-.proflie__btn_edit {
+.profile__btn_edit {
   background-image: url("../../../../images/svg/edit.svg");
   border: 1px solid var(--text);
   min-width: 24px;
@@ -6,7 +6,7 @@
 }
 
 @media screen and (max-width: 425px) {
-  .proflie__btn-edit {
+  .profile__btn-edit {
     min-width: 18px;
     min-height: 18px;
   }

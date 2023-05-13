@@ -1,4 +1,4 @@
-.proflie__btn {
+.profile__btn {
   background: transparent;
   cursor: pointer;
   background-repeat: no-repeat;
@@ -6,6 +6,6 @@
   border: 1px solid var(--text);
   transition: opacity 0.5s;
 }
-.proflie__btn:hover {
+.profile__btn:hover {
   opacity: 0.6;
 }

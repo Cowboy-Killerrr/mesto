@@ -1,17 +1,17 @@
-.proflie__btn_add {
+.profile__btn_add {
   background-image: url("../../../../images/svg/add.svg");
   min-width: 150px;
   min-height: 50px;
 }
 
 @media screen and (max-width: 768px) {
-  .proflie__btn_add {
+  .profile__btn_add {
     min-width: 50px;
   }
 }
 
 @media screen and (max-width: 650px) {
-  .proflie__btn_add {
+  .profile__btn_add {
     min-width: 282px;
   }
 }
