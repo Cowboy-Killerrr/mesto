@@ -14,7 +14,7 @@
 
 @media screen and (max-width: 650px) {
   .profile__btn_type_add {
-    min-width: 282px;
     background-image: url("../../../../../images/svg/add_size_s.svg");
+    min-width: 282px;
   }
 }
