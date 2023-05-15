@@ -1,7 +1,8 @@
 const page = document.querySelector('.page');
 const popup = document.querySelector('.popup');
+const form = document.querySelector('.form');
 
-const profileBtnEdit = document.querySelector('.profile__btn_edit');
+const profileBtnEdit = document.querySelector('.profile__btn_type_edit');
 const popupBtnClose = popup.querySelector('.popup__btn');
 const popupBtnSubmit = popup.querySelector('.form__btn');
 
@@ -12,8 +13,7 @@ const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
 
 function popupOpen() {
-  page.style.overflow = 'hidden';
-  popup.classList.add('popup__opened');
+  popup.classList.add('popup_opened');
 
   profileInputName.value = profileName.textContent;
   profileInputDescription.value = profileDescription.textContent;
@@ -21,7 +21,7 @@ function popupOpen() {
 
 function popupClose() {
   page.style.overflow = 'visible';
-  popup.classList.remove('popup__opened');
+  popup.classList.remove('popup_opened');
 }
 
 function handleFormSubmit(evt) {
@@ -36,4 +36,4 @@ function handleFormSubmit(evt) {
 
 profileBtnEdit.addEventListener('click', popupOpen);
 popupBtnClose.addEventListener('click', popupClose);
-popupBtnSubmit.addEventListener('click', handleFormSubmit);
+form.addEventListener('submit', handleFormSubmit);

@@ -1,5 +1,5 @@
-.profile__btn_edit {
-  background-image: url("../../../../images/svg/edit.svg");
+.profile__btn_type_edit {
+  background-image: url("../../../../../images/svg/edit_size_m.svg");
   border: 1px solid var(--text);
   min-width: 24px;
   min-height: 24px;
@@ -7,7 +7,8 @@
 }
 
 @media screen and (max-width: 425px) {
-  .profile__btn_edit {
+  .profile__btn_type_edit {
+    background-image: url("../../../../../images/svg/edit_size_s.svg");
     min-width: 18px;
     min-height: 18px;
     margin: 0 0 6px 0;

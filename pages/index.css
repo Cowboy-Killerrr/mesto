@@ -16,24 +16,19 @@
 @import url("../blocks/profile/__info/profile__info.css");
 @import url("../blocks/profile/__name-container/profile__name-container.css");
 @import url("../blocks/profile/__name/profile__name.css");
-@import url("../blocks/profile/__btn/proflie__btn.css");
-@import url("../blocks/profile/__btn/_edit/proflie__btn_edit.css");
+@import url("../blocks/profile/__btn/profile__btn.css");
+@import url("../blocks/profile/__btn/_type/_edit/profile__btn_type_edit.css");
+@import url("../blocks/profile/__btn/_type/_add/profile__btn_type_add.css");
 @import url("../blocks/profile/__description/profile__description.css");
-@import url("../blocks/profile/__btn/_add/proflie__btn_add.css");
 
 /* gallery */
 @import url("../blocks/gallery/__list/gallery__list.css");
 @import url("../blocks/gallery/__card/gallery__card.css");
 @import url("../blocks/gallery/__card-image/gallery__card-image.css");
-@import url("../blocks/gallery/__card-image/_fujiyama/gallery__card-image_fujiyama.css");
-@import url("../blocks/gallery/__card-image/_como-lake/gallery__card-image_como-lake.css");
-@import url("../blocks/gallery/__card-image/_golden-gate/gallery__card-image_golden-gate.css");
-@import url("../blocks/gallery/__card-image/_mormon-row/gallery__card-image_mormon-row.css");
-@import url("../blocks/gallery/__card-image/_eifel-tower/gallery__card-image_eifel-tower.css");
-@import url("../blocks/gallery/__card-image/_lincoln-heights/gallery__card-image_lincoln-heights.css");
 @import url("../blocks/gallery/__card-heading/gallery__card-heading.css");
 @import url("../blocks/gallery/__card-title/gallery__card-title.css");
 @import url("../blocks/gallery/__card-btn/gallery__card-btn.css");
+@import url("../blocks/gallery/__card-btn/_active/gallery__card-btn_active.css");
 
 /* footer */
 @import url("../blocks/footer/footer.css");
@@ -41,7 +36,7 @@
 
 /* popup */
 @import url("../blocks/popup/popup.css");
-@import url("../blocks/popup/__opened/popup__opened.css");
+@import url("../blocks/popup/_opened/popup_opened.css");
 @import url("../blocks/popup/__container/popup__container.css");
 @import url("../blocks/popup/__btn/popup__btn.css");
 @import url("../blocks/popup/__title/popup__title.css");

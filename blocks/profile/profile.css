@@ -1,14 +1,14 @@
 .profile {
   padding: 37px 0 51px 0;
   display: grid;
-  grid-template-columns: 120px calc(100% - 120px - 150px - (30px * 2)) 150px;
+  grid-template-columns: 120px 1fr 150px;
   gap: 30px;
   align-items: center;
 }
 
 @media screen and (max-width: 768px) {
   .profile {
-    grid-template-columns: 120px calc(100% - 120px - 50px - (30px * 2)) 50px;
+    grid-template-columns: 120px 1fr 50px;
   }
 }
 

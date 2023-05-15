@@ -10,6 +10,8 @@
   min-height: 19px;
   transition: opacity 0.5s;
 }
+
 .gallery__card-btn:hover {
   opacity: 0.5;
 }
+
