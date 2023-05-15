@@ -2,6 +2,7 @@
   background: none;
   cursor: pointer;
   border: none;
+  margin: 48px 0 0 0;
   background-color: var(--background);
   width: 100%;
   font-weight: 400;
@@ -18,6 +19,7 @@
 
 @media screen and (max-width: 375px) {
   .form__btn {
-    font-size: 14px;
+    margin: 42px 0 0 0;
+    font-size: 15px;
   }
 }

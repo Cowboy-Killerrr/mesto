@@ -1,5 +1,5 @@
 .profile {
-  padding: 40px 0 50px 0;
+  padding: 37px 0 51px 0;
   display: grid;
   grid-template-columns: 120px calc(100% - 120px - 150px - (30px * 2)) 150px;
   gap: 30px;

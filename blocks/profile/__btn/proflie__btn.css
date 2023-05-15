@@ -6,6 +6,7 @@
   border: 1px solid var(--text);
   transition: opacity 0.5s;
 }
+
 .profile__btn:hover {
   opacity: 0.6;
 }

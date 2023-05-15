@@ -48,6 +48,6 @@
 
 /* form */
 @import url("../blocks/form/form.css");
+@import url("../blocks/form/__inputs/form__inputs.css");
 @import url("../blocks/form/__input/form__input.css");
-@import url("../blocks/form/__input/_type/form__input_type_job.css");
 @import url("../blocks/form/__btn/form__btn.css");

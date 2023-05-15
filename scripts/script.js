@@ -5,10 +5,10 @@ const profileBtnEdit = document.querySelector('.profile__btn_edit');
 const popupBtnClose = popup.querySelector('.popup__btn');
 const popupBtnSubmit = popup.querySelector('.form__btn');
 
-const profileInputName = document.querySelector('.form__input_type_name');
-const profileInputDescription = document.querySelector('.form__input_type_job');
+const profileInputName = document.querySelector('#name');
+const profileInputDescription = document.querySelector('#job');
 
-const profileName = document.querySelector('.profile__name-text');
+const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
 
 function popupOpen() {
