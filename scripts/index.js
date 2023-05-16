@@ -4,7 +4,6 @@ const form = document.querySelector('.form');
 
 const profileBtnEdit = document.querySelector('.profile__btn_type_edit');
 const popupBtnClose = popup.querySelector('.popup__btn');
-const popupBtnSubmit = popup.querySelector('.form__btn');
 
 const profileInputName = document.querySelector('#name');
 const profileInputDescription = document.querySelector('#job');
