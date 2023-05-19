@@ -1,7 +1,8 @@
 .profile__btn_type_add {
-  background-image: url("../../../../images/svg/add.svg");
   min-width: 150px;
   min-height: 50px;
+
+  background-image: url("../../../../images/svg/add.svg");
   border: 2px solid var(--text);
   border-radius: 2px;
 }
@@ -14,7 +15,7 @@
 
 @media screen and (max-width: 650px) {
   .profile__btn_type_add {
-    background-size: 16px;
     min-width: 282px;
+    background-size: 16px;
   }
 }

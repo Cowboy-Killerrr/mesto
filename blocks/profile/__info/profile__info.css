@@ -6,7 +6,7 @@
 
 @media screen and (max-width: 425px) {
   .profile__info {
-    padding: 28px 0 32px 0;
     gap: 9px;
+    padding: 28px 0 32px 0;
   }
 }

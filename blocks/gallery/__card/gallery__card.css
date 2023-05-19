@@ -1,6 +1,6 @@
 .gallery__card {
-  background-color: var(--text);
-  color: var(--background);
-  border-radius: 10px;
   overflow: hidden;
+  color: var(--background);
+  background-color: var(--text);
+  border-radius: 10px;
 }

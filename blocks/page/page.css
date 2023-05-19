@@ -1,21 +1,21 @@
 .page {
+  position: relative;
+
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 40px;
+
   font-family: "Inter", "Arial", sans-serif;
   font-style: normal;
-
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-
+  color: var(--text);
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 
   background-color: var(--background);
-  color: var(--text);
 
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 0 40px;
-  position: relative;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 @media screen and (max-width: 425px) {

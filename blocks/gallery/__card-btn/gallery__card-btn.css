@@ -1,13 +1,16 @@
 .gallery__card-btn {
-  padding: 0;
-  border: none;
-  background: none;
   cursor: pointer;
+
+  min-width: 22px;
+  min-height: 19px;
+  padding: 0;
+
+  background: none;
   background-image: url("../../../images/svg/like.svg");
   background-repeat: no-repeat;
   background-position: center;
-  min-width: 22px;
-  min-height: 19px;
+  border: none;
+
   transition: opacity 0.5s;
 }
 

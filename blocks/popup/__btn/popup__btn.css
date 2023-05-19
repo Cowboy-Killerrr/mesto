@@ -1,16 +1,20 @@
 .popup__btn {
-  background: none;
   cursor: pointer;
-  border: none;
+
+  position: absolute;
+  top: -40px;
+  right: -40px;
+
   width: 32px;
   height: 32px;
+
+  background: none;
   background-image: url("../../../images/svg/close.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  position: absolute;
-  top: -40px;
-  right: -40px;
+  border: none;
+
   transition: opacity 0.5s;
 }
 
@@ -20,9 +24,9 @@
 
 @media screen and (max-width: 520px) {
   .popup__btn {
-    width: 20px;
-    height: 20px;
     top: -37px;
     right: 0;
+    width: 20px;
+    height: 20px;
   }
 }
