@@ -11,8 +11,6 @@ const profileInputDescription = document.querySelector('#job');
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
 
-
-
 const galleryCards = [
   {
     name: 'Вулкан Фудзияма',
@@ -41,17 +39,14 @@ const galleryCards = [
 ];
 
 const galleryList = document.querySelector('.gallery__list');
+const galleryCardTemplate = document.querySelector('#gallery__card-template').content;
 
 galleryCards.forEach(card => {
-  return galleryList.insertAdjacentHTML('beforeend', `
-  <li class="gallery__card">
-    <img src='${card.link}' alt='${card.name}' class="gallery__card-image">
-    <div class="gallery__card-heading">
-      <h2 class="gallery__card-title">${card.name}</h2>
-      <button type="button" class="gallery__card-btn"></button>
-    </div>
-  </li>
-  `)
+  const galleryCard = galleryCardTemplate.querySelector('.gallery__card').cloneNode(true);
+  galleryCard.querySelector('.gallery__card-image').src = card.link;
+  galleryCard.querySelector('.gallery__card-image').alt = card.name;
+  galleryCard.querySelector('.gallery__card-title').textContent = card.name;
+  galleryList.appendChild(galleryCard);
 })
 
 function popupOpen() {
