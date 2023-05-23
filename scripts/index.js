@@ -104,3 +104,36 @@ editProfileForm.addEventListener('submit', editFormSubmit);
 
 
 
+// --------------------------------------------
+// МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ КАРТОЧКИ В GALLERY
+// --------------------------------------------
+const profileBtnAdd = document.querySelector('.profile__btn_type_add');
+
+const popupAdd = popupTemplate.querySelector('.popup');
+const addProfileForm = popupAdd.querySelector('.form');
+const popupAddInputs = popupAdd.querySelectorAll('.form__input');
+
+function popupAddOpen() {
+  popupAdd.cloneNode(true);
+  popupAdd.classList.add('popup_opened');
+
+  popupAdd.querySelector('.popup__title').textContent = 'Новое место';
+  popupAdd.querySelector('.form').name = 'add-card-profile-form';
+  popupAdd.querySelector('.form__btn').textContent = 'Создать';
+
+  const popupAddInputTitle = popupAddInputs[0];
+  popupAddInputTitle.name = 'title';
+  popupAddInputTitle.id = '#title';
+  popupAddInputTitle.placeholder = 'Название';
+  popupAddInputTitle.value = '';
+
+  const popupAddInputLink = popupAddInputs[1];
+  popupAddInputLink.name = 'link';
+  popupAddInputLink.id = '#link';
+  popupAddInputLink.placeholder = 'Ссылка на картинку';
+  popupAddInputLink.value = '';
+
+  page.append(popupAdd);
+}
+
+profileBtnAdd.addEventListener('click', popupAddOpen);
