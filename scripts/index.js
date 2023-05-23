@@ -1,16 +1,10 @@
 const page = document.querySelector('.page');
-const popup = document.querySelector('.popup');
-const form = document.querySelector('.form');
 
-const profileBtnEdit = document.querySelector('.profile__btn_type_edit');
-const popupBtnClose = popup.querySelector('.popup__btn');
 
-const profileInputName = document.querySelector('#name');
-const profileInputDescription = document.querySelector('#job');
 
-const profileName = document.querySelector('.profile__name');
-const profileDescription = document.querySelector('.profile__description');
-
+// -----------------------------------------------
+// РЕНДЕР КАРТОЧЕК В GALLERY ПРИ ОТКРЫТИИ СТРАНИЦЫ
+// -----------------------------------------------
 const galleryCards = [
   {
     name: 'Вулкан Фудзияма',
@@ -46,31 +40,67 @@ galleryCards.forEach(card => {
   galleryCard.querySelector('.gallery__card-image').src = card.link;
   galleryCard.querySelector('.gallery__card-image').alt = card.name;
   galleryCard.querySelector('.gallery__card-title').textContent = card.name;
-  galleryList.appendChild(galleryCard);
+  galleryList.append(galleryCard);
 })
 
-function popupOpen() {
-  popup.classList.add('popup_opened');
 
-  profileInputName.value = profileName.textContent;
-  profileInputDescription.value = profileDescription.textContent;
+
+// -------------------------------------
+// МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+// -------------------------------------
+
+const profileBtnEdit = document.querySelector('.profile__btn_type_edit');
+
+const profileName = document.querySelector('.profile__name');
+const profileDescription = document.querySelector('.profile__description');
+
+const popupTemplate = document.querySelector('#popup').content;
+const popupEdit = popupTemplate.querySelector('.popup');
+const popupBtnClose = popupEdit.querySelector('.popup__btn_type_close');
+const editProfileForm = popupEdit.querySelector('.form');
+const popupEditInputs = popupEdit.querySelectorAll('.form__input');
+
+
+function popupEditOpen() {
+  popupEdit.cloneNode(true);
+  popupEdit.classList.add('popup_opened');
+
+  popupEdit.querySelector('.popup__title').textContent = 'Редактировать профиль';
+  popupEdit.querySelector('.form').name = 'edit-profile-form';
+  popupEdit.querySelector('.form__btn').textContent = 'Сохранить';
+
+  const popupEditInputName = popupEditInputs[0];
+  popupEditInputName.name = 'name';
+  popupEditInputName.id = '#name';
+  popupEditInputName.placeholder = 'Имя';
+  popupEditInputName.value = profileName.textContent;
+
+  const popupEditInputJob = popupEditInputs[1];
+  popupEditInputJob.name = 'job';
+  popupEditInputJob.id = '#job';
+  popupEditInputJob.placeholder = 'Род деятельности';
+  popupEditInputJob.value = profileDescription.textContent;
+
+  page.append(popupEdit);
 }
 
-function popupClose() {
-  page.style.overflow = 'visible';
-  popup.classList.remove('popup_opened');
+function popupEditClose() {
+  popupEdit.classList.remove('popup_opened');
+  page.removeChild(popupEdit);
 }
 
-function handleFormSubmit(evt) {
-  evt.preventDefault();
+function editFormSubmit(event) {
+  event.preventDefault();
 
-  profileName.textContent = profileInputName.value;
-  profileDescription.textContent = profileInputDescription.value;
+  profileName.textContent = popupEditInputs[0].value;
+  profileDescription.textContent = popupEditInputs[1].value;
 
-  popupClose();
+  popupEditClose();
 }
 
+profileBtnEdit.addEventListener('click', popupEditOpen);
+popupBtnClose.addEventListener('click', popupEditClose);
+editProfileForm.addEventListener('submit', editFormSubmit);
 
-profileBtnEdit.addEventListener('click', popupOpen);
-popupBtnClose.addEventListener('click', popupClose);
-form.addEventListener('submit', handleFormSubmit);
+
+
