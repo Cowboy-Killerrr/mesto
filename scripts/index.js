@@ -37,7 +37,7 @@ galleryCards.forEach(card => {
   galleryCard.querySelector('.gallery__card-image').src = card.link;
   galleryCard.querySelector('.gallery__card-image').alt = card.name;
   galleryCard.querySelector('.gallery__card-title').textContent = card.name;
-  galleryList.appendChild(galleryCard);
+  galleryList.append(galleryCard);
 })
 
 
@@ -68,8 +68,8 @@ function popupEditClose() {
   popupEdit.classList.remove('popup_opened');
 }
 
-function handleEditFormSubmit(evt) {
-  evt.preventDefault();
+function handleEditFormSubmit(event) {
+  event.preventDefault();
 
   profileName.textContent = profileInputName.value;
   profileDescription.textContent = profileInputDescription.value;
@@ -103,8 +103,8 @@ function popupAddCardClose() {
   popupAddCard.classList.remove('popup_opened');
 }
 
-function handleAddCardFormSubmit(evt) {
-  evt.preventDefault();
+function handleAddCardFormSubmit(event) {
+  event.preventDefault();
 
   popupAddCardClose();
 }
