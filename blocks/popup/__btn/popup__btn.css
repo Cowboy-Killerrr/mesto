@@ -1,18 +1,7 @@
 .popup__btn {
   cursor: pointer;
 
-  position: absolute;
-  top: -40px;
-  right: -40px;
-
-  width: 32px;
-  height: 32px;
-
   background: none;
-  background-image: url("../../../images/svg/close.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
   border: none;
 
   transition: opacity 0.5s;
@@ -22,11 +11,4 @@
   opacity: 0.6;
 }
 
-@media screen and (max-width: 520px) {
-  .popup__btn {
-    top: -37px;
-    right: 0;
-    width: 20px;
-    height: 20px;
-  }
-}
+

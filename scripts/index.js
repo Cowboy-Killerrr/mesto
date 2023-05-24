@@ -1,15 +1,6 @@
-const page = document.querySelector('.page');
-const popup = document.querySelector('.popup');
-const form = document.querySelector('.form');
-
-const profileBtnEdit = document.querySelector('.profile__btn_type_edit');
-const popupBtnClose = popup.querySelector('.popup__btn');
-
-const profileInputName = document.querySelector('#name');
-const profileInputDescription = document.querySelector('#job');
-
-const profileName = document.querySelector('.profile__name');
-const profileDescription = document.querySelector('.profile__description');
+// ----------------------------------------
+// ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+// ----------------------------------------
 
 const galleryCards = [
   {
@@ -49,28 +40,75 @@ galleryCards.forEach(card => {
   galleryList.appendChild(galleryCard);
 })
 
-function popupOpen() {
-  popup.classList.add('popup_opened');
+
+
+
+
+// ------------------------------------
+// МОДАЛЬНОЕ ОКНО РЕДАТИРОВАНИЯ ПРОФИЛЯ
+// ------------------------------------
+
+const profileInputName = document.querySelector('#name');
+const profileInputDescription = document.querySelector('#job');
+const profileName = document.querySelector('.profile__name');
+const profileDescription = document.querySelector('.profile__description');
+const profileBtnEdit = document.querySelector('.profile__btn_type_edit');
+const popupEdit = document.querySelector('.popup_type_edit');
+const popupEditCloseBtn = popupEdit.querySelector('.popup__btn_type_close');
+const popupEditForm = popupEdit.querySelector('.form_type_edit');
+
+function popupEditOpen() {
+  popupEdit.classList.add('popup_opened');
 
   profileInputName.value = profileName.textContent;
   profileInputDescription.value = profileDescription.textContent;
 }
 
-function popupClose() {
-  page.style.overflow = 'visible';
-  popup.classList.remove('popup_opened');
+function popupEditClose() {
+  popupEdit.classList.remove('popup_opened');
 }
 
-function handleFormSubmit(evt) {
+function handleEditFormSubmit(evt) {
   evt.preventDefault();
 
   profileName.textContent = profileInputName.value;
   profileDescription.textContent = profileInputDescription.value;
 
-  popupClose();
+  popupEditClose();
 }
 
+profileBtnEdit.addEventListener('click', popupEditOpen);
+popupEditCloseBtn.addEventListener('click', popupEditClose);
+popupEditForm.addEventListener('submit', handleEditFormSubmit);
 
-profileBtnEdit.addEventListener('click', popupOpen);
-popupBtnClose.addEventListener('click', popupClose);
-form.addEventListener('submit', handleFormSubmit);
+
+
+
+
+// ----------------------------------
+// МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ КАРТОЧКИ
+// ----------------------------------
+const addCardTitleInput = document.querySelector('#title');
+const addCardLinkInput = document.querySelector('#link');
+const profileBtnAddCard = document.querySelector('.profile__btn_type_add');
+const popupAddCard = document.querySelector('.popup_type_add');
+const popupAddCardCloseBtn = popupAddCard.querySelector('.popup__btn_type_close');
+const popupAddCardForm = popupAddCard.querySelector('.form_type_add-card');
+
+function popupAddCardOpen() {
+  popupAddCard.classList.add('popup_opened');
+}
+
+function popupAddCardClose() {
+  popupAddCard.classList.remove('popup_opened');
+}
+
+function handleAddCardFormSubmit(evt) {
+  evt.preventDefault();
+
+  popupAddCardClose();
+}
+
+profileBtnAddCard.addEventListener('click', popupAddCardOpen);
+popupAddCardCloseBtn.addEventListener('click', popupAddCardClose);
+popupAddCardForm.addEventListener('submit', handleAddCardFormSubmit);
