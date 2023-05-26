@@ -8,7 +8,7 @@ const galleryCards = [
     link: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
   },
   {
-    name: 'Эйфелева Башня',
+    name: 'Париж',
     link: 'https://images.unsplash.com/photo-1431274172761-fca41d930114?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
   },
   {
@@ -31,6 +31,7 @@ const galleryCards = [
 
 const galleryList = document.querySelector('.gallery__list');
 const galleryCardTemplate = document.querySelector('#gallery__card-template').content;
+
 
 galleryCards.forEach(card => {
   const galleryCard = galleryCardTemplate.querySelector('.gallery__card').cloneNode(true);
@@ -106,6 +107,21 @@ function popupAddCardClose() {
 function handleAddCardFormSubmit(event) {
   event.preventDefault();
 
+  galleryCards.unshift(
+    {
+      name: addCardTitleInput.value,
+      link: addCardLinkInput.value
+    }
+  )
+
+  const galleryCard = galleryCardTemplate.querySelector('.gallery__card').cloneNode(true);
+  galleryCard.querySelector('.gallery__card-image').src = galleryCards[0].link;
+  galleryCard.querySelector('.gallery__card-image').alt = galleryCards[0].name;
+  galleryCard.querySelector('.gallery__card-title').textContent = galleryCards[0].name;
+  galleryList.insertBefore(galleryCard, galleryList.firstChild);
+
+  addCardTitleInput.value = '';
+  addCardLinkInput.value = '';
   popupAddCardClose();
 }
 
