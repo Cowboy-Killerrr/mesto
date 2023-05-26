@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./pages/index.css" />
     <title>Mesto</title>
+    <script src="./scripts/index.js" defer></script>
   </head>
   <body class="page">
     <!-- header -->
@@ -74,11 +75,11 @@
     </div>
 
     <!-- popup-add-card -->
-    <div class="popup popup_type_add">
+    <div id="popup-add-card" class="popup">
       <div class="popup__container">
         <button type="button" class="popup__btn popup__btn_type_close"></button>
         <h2 class="popup__title">Новое место</h2>
-        <form action="#" name="add-card-profile-form" class="form form_type_add-card">
+        <form action="#" name="add-card-form" id="add-card-form" class="form">
           <div class="form__inputs">
             <input
               type="text"
@@ -99,9 +100,10 @@
         </form>
       </div>
     </div>
+
     <template id="card-template">
       <li class="card">
-        <img class="card__image">
+        <img src="" alt="" class="card__image">
         <div class="card__heading-container">
           <h2 class="card__title"></h2>
           <button type="button" class="card__like-btn"></button>
@@ -109,6 +111,6 @@
       </li>
     </template>
 
-    <script src="./scripts/index.js"></script>
+
   </body>
 </html>

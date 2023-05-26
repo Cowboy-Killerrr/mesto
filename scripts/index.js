@@ -30,16 +30,44 @@ const galleryCards = [
 ];
 
 const galleryList = document.querySelector('.gallery__list');
-const galleryCardTemplate = document.querySelector('#card-template').content;
+const cardTemplate = document.querySelector('#card-template');
+const cardContent = cardTemplate.content;
+const card = cardContent.querySelector('.card');
 
-
-galleryCards.forEach(card => {
-  const galleryCard = galleryCardTemplate.querySelector('.card').cloneNode(true);
-  galleryCard.querySelector('.card__image').src = card.link;
-  galleryCard.querySelector('.card__image').alt = card.name;
-  galleryCard.querySelector('.card__title').textContent = card.name;
-  galleryList.append(galleryCard);
+galleryCards.forEach(item => {
+  const newCard = renderCards(item);
+  galleryList.prepend(newCard);
 })
+
+function renderCards(item) {
+  const newCard = card.cloneNode(true);
+
+  const newCardImageSrc = newCard.querySelector('.card__image');
+  newCardImageSrc.src = item.link;
+
+  const newCardImageAlt = newCard.querySelector('.card__image');
+  newCardImageAlt.alt = item.name;
+
+  const newCardTitle = newCard.querySelector('.card__title');
+  newCardTitle.textContent = item.name;
+
+  // -------------
+  // ЛАЙК КАРТОЧЕК
+  // -------------
+
+  const likeBtn = newCard.querySelector('.card__like-btn');
+  likeBtn.addEventListener('click', (event) => {
+    const element = event.target;
+    console.log(element);
+    if (element.classList.contains('card__like-btn_active')) {
+      element.classList.remove('card__like-btn_active');
+    } else {
+      element.classList.add('card__like-btn_active')
+    }
+  })
+
+  return newCard;
+}
 
 
 
@@ -89,12 +117,32 @@ popupEditForm.addEventListener('submit', handleEditFormSubmit);
 // ----------------------------------
 // МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ КАРТОЧКИ
 // ----------------------------------
-const addCardTitleInput = document.querySelector('#title');
-const addCardLinkInput = document.querySelector('#link');
-const profileBtnAddCard = document.querySelector('.profile__btn_type_add');
-const popupAddCard = document.querySelector('.popup_type_add');
+
+const addCardBtn = document.querySelector('.profile__btn_type_add');
+const popupAddCard = document.querySelector('#popup-add-card');
+const addCardForm = document.querySelector('#add-card-form');
 const popupAddCardCloseBtn = popupAddCard.querySelector('.popup__btn_type_close');
-const popupAddCardForm = popupAddCard.querySelector('.form_type_add-card');
+
+addCardForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const inputTitle = addCardForm.querySelector('#title');
+  const inputTitleValue = inputTitle.value;
+
+  const inputLink = addCardForm.querySelector('#link');
+  const inputLinkValue = inputLink.value;
+
+  const cardData = {
+    name: inputTitleValue,
+    link: inputLinkValue,
+  }
+
+  const newCard = renderCards(cardData);
+
+  galleryList.prepend(newCard);
+  addCardForm.reset();
+  popupAddCardClose();
+})
 
 function popupAddCardOpen() {
   popupAddCard.classList.add('popup_opened');
@@ -104,46 +152,5 @@ function popupAddCardClose() {
   popupAddCard.classList.remove('popup_opened');
 }
 
-function handleAddCardFormSubmit(event) {
-  event.preventDefault();
-
-  galleryCards.unshift(
-    {
-      name: addCardTitleInput.value,
-      link: addCardLinkInput.value
-    }
-  )
-
-  const galleryCard = galleryCardTemplate.querySelector('.card').cloneNode(true);
-  galleryCard.querySelector('.card__image').src = galleryCards[0].link;
-  galleryCard.querySelector('.card__image').alt = galleryCards[0].name;
-  galleryCard.querySelector('.card__title').textContent = galleryCards[0].name;
-  galleryList.insertBefore(galleryCard, galleryList.firstChild);
-
-  addCardTitleInput.value = '';
-  addCardLinkInput.value = '';
-  popupAddCardClose();
-}
-
-profileBtnAddCard.addEventListener('click', popupAddCardOpen);
+addCardBtn.addEventListener('click', popupAddCardOpen);
 popupAddCardCloseBtn.addEventListener('click', popupAddCardClose);
-popupAddCardForm.addEventListener('submit', handleAddCardFormSubmit);
-
-
-
-
-
-// -------------
-// ЛАЙК КАРТОЧЕК
-// -------------
-const cardLikeBtn = document.querySelectorAll('.card__like-btn');
-
-cardLikeBtn.forEach(button => {
-  button.addEventListener('click', () => {
-    if (button.classList.contains('card__like-btn_active')) {
-      button.classList.remove('card__like-btn_active');
-    } else {
-      button.classList.add('card__like-btn_active');
-    }
-  })
-})
