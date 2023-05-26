@@ -30,14 +30,14 @@ const galleryCards = [
 ];
 
 const galleryList = document.querySelector('.gallery__list');
-const galleryCardTemplate = document.querySelector('#gallery__card-template').content;
+const galleryCardTemplate = document.querySelector('#card-template').content;
 
 
 galleryCards.forEach(card => {
-  const galleryCard = galleryCardTemplate.querySelector('.gallery__card').cloneNode(true);
-  galleryCard.querySelector('.gallery__card-image').src = card.link;
-  galleryCard.querySelector('.gallery__card-image').alt = card.name;
-  galleryCard.querySelector('.gallery__card-title').textContent = card.name;
+  const galleryCard = galleryCardTemplate.querySelector('.card').cloneNode(true);
+  galleryCard.querySelector('.card__image').src = card.link;
+  galleryCard.querySelector('.card__image').alt = card.name;
+  galleryCard.querySelector('.card__title').textContent = card.name;
   galleryList.append(galleryCard);
 })
 
@@ -114,10 +114,10 @@ function handleAddCardFormSubmit(event) {
     }
   )
 
-  const galleryCard = galleryCardTemplate.querySelector('.gallery__card').cloneNode(true);
-  galleryCard.querySelector('.gallery__card-image').src = galleryCards[0].link;
-  galleryCard.querySelector('.gallery__card-image').alt = galleryCards[0].name;
-  galleryCard.querySelector('.gallery__card-title').textContent = galleryCards[0].name;
+  const galleryCard = galleryCardTemplate.querySelector('.card').cloneNode(true);
+  galleryCard.querySelector('.card__image').src = galleryCards[0].link;
+  galleryCard.querySelector('.card__image').alt = galleryCards[0].name;
+  galleryCard.querySelector('.card__title').textContent = galleryCards[0].name;
   galleryList.insertBefore(galleryCard, galleryList.firstChild);
 
   addCardTitleInput.value = '';
@@ -128,3 +128,22 @@ function handleAddCardFormSubmit(event) {
 profileBtnAddCard.addEventListener('click', popupAddCardOpen);
 popupAddCardCloseBtn.addEventListener('click', popupAddCardClose);
 popupAddCardForm.addEventListener('submit', handleAddCardFormSubmit);
+
+
+
+
+
+// -------------
+// ЛАЙК КАРТОЧЕК
+// -------------
+const cardLikeBtn = document.querySelectorAll('.card__like-btn');
+
+cardLikeBtn.forEach(button => {
+  button.addEventListener('click', () => {
+    if (button.classList.contains('card__like-btn_active')) {
+      button.classList.remove('card__like-btn_active');
+    } else {
+      button.classList.add('card__like-btn_active');
+    }
+  })
+})

@@ -1,4 +1,4 @@
-.gallery__card-btn {
+.card__like-btn {
   cursor: pointer;
 
   min-width: 22px;
@@ -14,7 +14,7 @@
   transition: opacity 0.5s;
 }
 
-.gallery__card-btn:hover {
+.card__like-btn:hover {
   opacity: 0.5;
 }
 
