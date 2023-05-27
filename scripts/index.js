@@ -51,7 +51,7 @@ function renderCards(item) {
   newCardTitle.textContent = item.name;
 
   // -------------
-  // ЛАЙК КАРТОЧЕК
+  // ЛАЙК КАРТОЧКИ
   // -------------
   const likeBtn = newCard.querySelector('.card__like-btn');
   likeBtn.addEventListener('click', (event) => {
@@ -61,6 +61,14 @@ function renderCards(item) {
     } else {
       element.classList.add('card__like-btn_active')
     }
+  })
+
+  // -----------------
+  // УДАЛЕНИЕ КАРТОЧКИ
+  // -----------------
+  const deleteBtn = newCard.querySelector('.card__delete-btn');
+  deleteBtn.addEventListener('click', () => {
+    galleryList.removeChild(newCard);
   })
 
   return newCard;
