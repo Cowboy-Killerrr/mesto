@@ -71,6 +71,23 @@ function renderCards(item) {
     galleryList.removeChild(newCard);
   })
 
+  // --------------------------
+  // ПРОСМОТР КАРТИНКИ КАРТОЧКИ
+  // --------------------------
+  const cardImage = newCard.querySelector('.card__image');
+  const popupViewImage = document.querySelector('#popup-view-image');
+
+  cardImage.addEventListener('click', () => {
+    openPopup(popupViewImage);
+
+    const image = popupViewImage.querySelector('.popup__image');
+    image.src = item.link;
+    image.alt = item.name;
+
+    const imageTitle = popupViewImage.querySelector('.popup__image-subtext');
+    imageTitle.textContent = item.name;
+  })
+
   return newCard;
 }
 
