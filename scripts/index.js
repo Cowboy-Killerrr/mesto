@@ -1,7 +1,6 @@
 // ----------------------------------------
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 // ----------------------------------------
-
 const galleryCards = [
   {
     name: 'Вулкан Фудзияма',
@@ -54,11 +53,9 @@ function renderCards(item) {
   // -------------
   // ЛАЙК КАРТОЧЕК
   // -------------
-
   const likeBtn = newCard.querySelector('.card__like-btn');
   likeBtn.addEventListener('click', (event) => {
     const element = event.target;
-    console.log(element);
     if (element.classList.contains('card__like-btn_active')) {
       element.classList.remove('card__like-btn_active');
     } else {
@@ -73,55 +70,84 @@ function renderCards(item) {
 
 
 
-// ------------------------------------
-// МОДАЛЬНОЕ ОКНО РЕДАТИРОВАНИЯ ПРОФИЛЯ
-// ------------------------------------
+// ----------------------------------
+// ОТКРЫТИЕ И ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН
+// ----------------------------------
 
-const profileInputName = document.querySelector('#name');
-const profileInputDescription = document.querySelector('#job');
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+  const closeBtn = popup.querySelector('.popup__btn_type_close');
+
+  closeBtn.addEventListener('click', () => {
+    closePopup(popup);
+  })
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+}
+
+
+
+
+
+// ОКНО РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const profileName = document.querySelector('.profile__name');
-const profileDescription = document.querySelector('.profile__description');
-const profileBtnEdit = document.querySelector('.profile__btn_type_edit');
-const popupEdit = document.querySelector('.popup_type_edit');
-const popupEditCloseBtn = popupEdit.querySelector('.popup__btn_type_close');
-const popupEditForm = popupEdit.querySelector('.form_type_edit');
+const profileJob = document.querySelector('.profile__job');
+const editProfileBtn = document.querySelector('.profile__btn_type_edit');
+const popupEditProfile = document.querySelector('#popup-edit-profile');
 
-function popupEditOpen() {
-  popupEdit.classList.add('popup_opened');
+// -----------------------------------------------
+// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+// -----------------------------------------------
+editProfileBtn.addEventListener('click', () => {
+  openPopup(popupEditProfile);
 
-  profileInputName.value = profileName.textContent;
-  profileInputDescription.value = profileDescription.textContent;
-}
+  const editProfileForm = popupEditProfile.querySelector('#edit-profile-form');
 
-function popupEditClose() {
-  popupEdit.classList.remove('popup_opened');
-}
+  const inputName = editProfileForm.querySelector('#name');
+  inputName.value = profileName.textContent;
 
-function handleEditFormSubmit(event) {
+  const inputJob = editProfileForm.querySelector('#job');
+  inputJob.value = profileJob.textContent;
+})
+
+// -----------------------------------
+// ЛОГИКА ФОРМЫ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+// -----------------------------------
+const editProfileForm = document.querySelector('#edit-profile-form');
+
+editProfileForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
-  profileName.textContent = profileInputName.value;
-  profileDescription.textContent = profileInputDescription.value;
+  const inputName = editProfileForm.querySelector('#name');
+  profileName.textContent = inputName.value;
 
-  popupEditClose();
-}
+  const inputJob = editProfileForm.querySelector('#job');
+  profileJob.textContent = inputJob.value;
 
-profileBtnEdit.addEventListener('click', popupEditOpen);
-popupEditCloseBtn.addEventListener('click', popupEditClose);
-popupEditForm.addEventListener('submit', handleEditFormSubmit);
-
+  closePopup(popupEditProfile);
+})
 
 
 
 
-// ----------------------------------
-// МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ КАРТОЧКИ
-// ----------------------------------
 
+// ОКНО ДОБАВЛЕНИЯ КАРТОЧКИ
 const addCardBtn = document.querySelector('.profile__btn_type_add');
 const popupAddCard = document.querySelector('#popup-add-card');
+
+// --------------------------------------------
+// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
+// --------------------------------------------
+addCardBtn.addEventListener('click', () => {
+  openPopup(popupAddCard);
+})
+
+// --------------------------------
+// ЛОГИКА ФОРМЫ ДОБАВЛЕНИЯ КАРТОЧКИ
+// --------------------------------
 const addCardForm = document.querySelector('#add-card-form');
-const popupAddCardCloseBtn = popupAddCard.querySelector('.popup__btn_type_close');
 
 addCardForm.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -141,16 +167,5 @@ addCardForm.addEventListener('submit', (event) => {
 
   galleryList.prepend(newCard);
   addCardForm.reset();
-  popupAddCardClose();
+  closePopup(popupAddCard);
 })
-
-function popupAddCardOpen() {
-  popupAddCard.classList.add('popup_opened');
-}
-
-function popupAddCardClose() {
-  popupAddCard.classList.remove('popup_opened');
-}
-
-addCardBtn.addEventListener('click', popupAddCardOpen);
-popupAddCardCloseBtn.addEventListener('click', popupAddCardClose);
