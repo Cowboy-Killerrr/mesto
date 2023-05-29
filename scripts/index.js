@@ -31,14 +31,14 @@ const popupImageTitle = document.querySelector('.popup__image-subtext');
 // -----------------------------
 // ДОБАВИТЬ КАРТОЧКУ НА СТРАНИЦУ
 // -----------------------------
-function addNewCard(card) {
-  cardsContainer.prepend(card);
+function addNewCard(card, container) {
+  container.prepend(card);
 }
 
 // ------------------
 // ОТРИСОВКА КАРТОЧЕК
 // ------------------
-function createCards(cardData) {
+function createCard(cardData) {
   const newCard = card.cloneNode(true);
 
   const newCardImage = newCard.querySelector('.card__image');
@@ -62,15 +62,14 @@ function createCards(cardData) {
   // -----------------
   const deleteBtn = newCard.querySelector('.card__delete-btn');
   deleteBtn.addEventListener('click', () => {
-    cardsContainer.removeChild(newCard);
+    newCard.remove();
   })
 
   // --------------------------
   // ПРОСМОТР КАРТИНКИ КАРТОЧКИ
   // --------------------------
-  const cardImage = newCard.querySelector('.card__image');
 
-  cardImage.addEventListener('click', () => {
+  newCardImage.addEventListener('click', () => {
     openPopup(popupViewImage);
 
     popupImage.src = cardData.link;
@@ -100,8 +99,8 @@ function closePopup(popup) {
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 // ----------------------------------------
 galleryCards.forEach(item => {
-  const newCard = createCards(item);
-  addNewCard(newCard);
+  const newCard = createCard(item);
+  addNewCard(newCard, cardsContainer);
 })
 
 // -------------------------------
@@ -155,9 +154,9 @@ addCardForm.addEventListener('submit', (event) => {
     link: inputLink.value,
   }
 
-  const newCard = createCards(cardData);
+  const newCard = createCard(cardData);
 
   addCardForm.reset();
-  addNewCard(newCard);
+  addNewCard(newCard, cardsContainer);
   closePopup(popupAddCard);
 })
