@@ -2,7 +2,7 @@
   cursor: pointer;
 
   width: 100%;
-  margin: 48px 0 0 0;
+  margin: 43px 0 0 0;
   padding: 14px 0;
 
   font-size: 18px;
@@ -13,6 +13,7 @@
   background: none;
   background-color: var(--background);
   border: none;
+  border-radius: 2px;
 
   transition: background-color 0.5s;
 }

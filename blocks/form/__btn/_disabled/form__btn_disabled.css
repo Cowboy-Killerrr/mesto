@@ -1,0 +1,13 @@
+.form__btn_disabled {
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  color: var(--background);
+
+  opacity: 0.2;
+  background-color: var(--text);
+  border: 1px solid var(--background);
+}
