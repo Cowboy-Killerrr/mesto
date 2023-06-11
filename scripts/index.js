@@ -89,7 +89,7 @@ function openPopup(popup) {
 }
 
 // -----------------------
-// ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН
+// ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН
 // -----------------------
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
@@ -103,14 +103,15 @@ galleryCards.forEach(item => {
   addNewCard(newCard, cardsContainer);
 })
 
-// -------------------------------
-// КНОПКА ЗАКРЫТИЯ МОДАЛЬНОГО ОКНА
-// -------------------------------
+// ------------------------
+// ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
+// ------------------------
 popupNodeList.forEach(popup => {
-  const closeBtn = popup.querySelector('.popup__btn_type_close');
-
-  closeBtn.addEventListener('click', () => {
-    closePopup(popup);
+  popup.addEventListener('click', event => {
+    const elementClassList = event.target.classList;
+    if (elementClassList.contains('popup') || elementClassList.contains('popup__btn_type_close')) {
+      closePopup(popup);
+    }
   })
 })
 
