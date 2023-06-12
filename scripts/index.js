@@ -113,6 +113,12 @@ popupNodeList.forEach(popup => {
       closePopup(popup);
     }
   })
+
+  popup.addEventListener('keydown', event => {
+    if (event.key === "Escape") {
+      closePopup(popup);
+    }
+  })
 })
 
 // -----------------------------------------------

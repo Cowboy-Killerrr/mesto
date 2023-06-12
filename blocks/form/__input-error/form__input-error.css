@@ -1,5 +1,5 @@
 .form__input-error {
-  display: none;
+  min-height: 30px;
 
   font-size: 12px;
   font-weight: 400;
