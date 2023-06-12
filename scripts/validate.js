@@ -9,7 +9,6 @@ function enableValidation(formSelectors) {
     );
 
     inputElement.classList.add(formSelectors.inputErrorClass);
-    errorElement.classList.add(formSelectors.errorClass);
     errorElement.textContent = errorMessage;
   }
 
@@ -19,7 +18,6 @@ function enableValidation(formSelectors) {
     );
 
     inputElement.classList.remove(formSelectors.inputErrorClass);
-    errorElement.classList.remove(formSelectors.errorClass);
     errorElement.textContent = "";
   }
 
@@ -76,5 +74,4 @@ enableValidation({
   submitButtonSelector: ".form__btn",
   inactiveButtonClass: "form__btn_disabled",
   inputErrorClass: "form__input_state_error",
-  errorClass: "form__input-error_visible",
 });

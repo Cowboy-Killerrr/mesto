@@ -2,7 +2,7 @@
   cursor: pointer;
 
   width: 100%;
-  margin: 43px 0 0 0;
+  margin: 8px 0 0 0;
   padding: 14px 0;
 
   font-size: 18px;
@@ -24,7 +24,6 @@
 
 @media screen and (max-width: 425px) {
   .form__btn {
-    margin: 42px 0 0 0;
     font-size: 15px;
   }
 }
