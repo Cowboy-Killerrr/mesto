@@ -11,12 +11,15 @@
 
   height: 100vh;
 
-
   visibility: hidden;
   opacity: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  filter: alpha(opacity=0);
 
-  transition: visibility 0s, opacity 0.5s;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 @media screen and (max-width: 520px) {
