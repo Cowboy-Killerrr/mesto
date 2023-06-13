@@ -22,6 +22,20 @@
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.form__btn:disabled {
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  color: var(--background);
+
+  opacity: 0.2;
+  background-color: var(--text);
+  border: 1px solid var(--background);
+}
+
 @media screen and (max-width: 425px) {
   .form__btn {
     font-size: 15px;

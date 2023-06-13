@@ -3,69 +3,73 @@ function enableValidation(formSelectors) {
     document.querySelectorAll(formSelectors.formSelector)
   );
 
-  function showInputError(formElement, inputElement, errorMessage) {
-    const errorElement = formElement.querySelector(
-      `.${inputElement.id}-input-error`
-    );
-
-    inputElement.classList.add(formSelectors.inputErrorClass);
-    errorElement.textContent = errorMessage;
-  }
-
-  function hideInputError(formElement, inputElement) {
-    const errorElement = formElement.querySelector(
-      `.${inputElement.id}-input-error`
-    );
-
-    inputElement.classList.remove(formSelectors.inputErrorClass);
-    errorElement.textContent = "";
-  }
-
-  function checkInputValidity(formElement, inputElement) {
-    if (!inputElement.validity.valid) {
-      showInputError(formElement, inputElement, inputElement.validationMessage);
-    } else {
-      hideInputError(formElement, inputElement);
-    }
-  }
-
-  function setEventListeners(formElement) {
-    const inputList = Array.from(
-      formElement.querySelectorAll(formSelectors.inputSelector)
-    );
-    const buttonElement = formElement.querySelector(
-      formSelectors.submitButtonSelector
-    );
-
-    if (!(formElement.id === "edit-profile-form")) {
-      toggleButtonState(inputList, buttonElement);
-    }
-
-    inputList.forEach((inputElement) => {
-      inputElement.addEventListener("input", () => {
-        checkInputValidity(formElement, inputElement);
-        toggleButtonState(inputList, buttonElement);
-      });
-    });
-  }
-
-  function hasInvalidInput(inputList) {
-    return inputList.some((inputElement) => {
-      return !inputElement.validity.valid;
-    });
-  }
-
-  function toggleButtonState(inputList, buttonElement) {
-    if (hasInvalidInput(inputList)) {
-      buttonElement.classList.add("form__btn_disabled");
-    } else {
-      buttonElement.classList.remove("form__btn_disabled");
-    }
-  }
-
   formList.forEach((formElement) => {
     setEventListeners(formElement, formSelectors);
   });
+}
+
+function showInputError(formElement, inputElement, errorMessage, formSelectors) {
+  const errorElement = formElement.querySelector(
+    `.${inputElement.id}-input-error`
+  );
+
+  inputElement.classList.add(formSelectors.inputErrorClass);
+  errorElement.textContent = errorMessage;
+}
+
+function hideInputError(formElement, inputElement, formSelectors) {
+  const errorElement = formElement.querySelector(
+    `.${inputElement.id}-input-error`
+  );
+
+  inputElement.classList.remove(formSelectors.inputErrorClass);
+  errorElement.textContent = "";
+}
+
+function checkInputValidity(formElement, inputElement, formSelectors) {
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage, formSelectors);
+  } else {
+    hideInputError(formElement, inputElement, formSelectors);
+  }
+}
+
+function setEventListeners(formElement, formSelectors) {
+  const inputList = Array.from(
+    formElement.querySelectorAll(formSelectors.inputSelector)
+  );
+  const buttonElement = formElement.querySelector(
+    formSelectors.submitButtonSelector
+  );
+
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener("input", () => {
+      checkInputValidity(formElement, inputElement, formSelectors);
+      toggleButtonState(inputList, buttonElement);
+    });
+  });
+}
+
+function hasInvalidInput(inputList) {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
+}
+
+function toggleButtonState(inputList, buttonElement) {
+  if (hasInvalidInput(inputList)) {
+    disableButton(buttonElement);
+  } else {
+    enableButton(buttonElement)
+  }
+}
+
+function disableButton(buttonElement) {
+  buttonElement.disabled = true;
+}
+
+function enableButton(buttonElement) {
+  buttonElement.disabled = false;
 }
 
 enableValidation({

@@ -170,7 +170,10 @@ addCardForm.addEventListener('submit', (event) => {
 
   const newCard = createCard(cardData);
 
+  const submitBtn = addCardForm.querySelector('.form__btn');
+
   addCardForm.reset();
   addNewCard(newCard, cardsContainer);
   closePopup(popupAddCard);
+  disableButton(submitBtn);
 })
