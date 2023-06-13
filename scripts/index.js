@@ -86,13 +86,26 @@ function createCard(cardData) {
 // -----------------------
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', event => {
+    handleCloseByEsc(popup, event);
+  }, { once: true })
 }
 
-// -----------------------
+// -------------------------------
 // ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН
-// -----------------------
+// -------------------------------
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+}
+
+// ----------------------------------------------
+// ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН ПО НАЖАТИЮ ESC
+// ----------------------------------------------
+
+function handleCloseByEsc(popup, event) {
+  if (event.key === 'Escape') {
+    closePopup(popup);
+  }
 }
 
 // ----------------------------------------
@@ -110,12 +123,6 @@ popupNodeList.forEach(popup => {
   popup.addEventListener('click', event => {
     const elementClassList = event.target.classList;
     if (elementClassList.contains('popup') || elementClassList.contains('popup__btn_type_close')) {
-      closePopup(popup);
-    }
-  })
-
-  popup.addEventListener('keydown', event => {
-    if (event.key === "Escape") {
       closePopup(popup);
     }
   })
