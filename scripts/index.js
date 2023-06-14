@@ -52,9 +52,8 @@ function createCard(cardData) {
   // ЛАЙК КАРТОЧКИ
   // -------------
   const likeBtn = newCard.querySelector('.card__like-btn');
-  likeBtn.addEventListener('click', (event) => {
-    const element = event.target;
-    element.classList.toggle('card__like-btn_active');
+  likeBtn.addEventListener('click', () => {
+    likeBtn.classList.toggle('card__like-btn_active');
   })
 
   // -----------------
