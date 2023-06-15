@@ -22,6 +22,7 @@ const popupAddCard = document.querySelector('#popup-add-card');
 const addCardForm = document.querySelector('#add-card-form');
 const inputTitle = addCardForm.querySelector('#title');
 const inputLink = addCardForm.querySelector('#link');
+const submitBtn = addCardForm.querySelector('.form__btn');
 
 // ДЛЯ ОКНА ПРОСМОТРА КАРТИНКИ
 const popupViewImage = document.querySelector('#popup-view-image');
@@ -85,9 +86,7 @@ function createCard(cardData) {
 // -----------------------
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  document.addEventListener('keydown', event => {
-    handleCloseByEsc(popup, event);
-  }, { once: true })
+  document.addEventListener('keydown', handleCloseByEsc);
 }
 
 // -------------------------------
@@ -95,16 +94,20 @@ function openPopup(popup) {
 // -------------------------------
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleCloseByEsc);
 }
 
 // ----------------------------------------------
 // ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН ПО НАЖАТИЮ ESC
 // ----------------------------------------------
 
-function handleCloseByEsc(popup, event) {
-  if (event.key === 'Escape') {
-    closePopup(popup);
-  }
+function handleCloseByEsc(event) {
+  const popupElements = Array.from(document.querySelectorAll('.popup'));
+  popupElements.forEach(popup => {
+    if (popup.classList.contains('popup_opened') && event.key === 'Escape') {
+      closePopup(popup);
+    }
+  })
 }
 
 // ----------------------------------------
@@ -122,12 +125,6 @@ popupNodeList.forEach(popup => {
   popup.addEventListener('click', event => {
     const elementClassList = event.target.classList;
     if (elementClassList.contains('popup') || elementClassList.contains('popup__btn_type_close')) {
-      closePopup(popup);
-    }
-  })
-
-  popup.addEventListener('keydown', event => {
-    if (event.key === "Escape") {
       closePopup(popup);
     }
   })
@@ -174,8 +171,6 @@ addCardForm.addEventListener('submit', (event) => {
   }
 
   const newCard = createCard(cardData);
-
-  const submitBtn = addCardForm.querySelector('.form__btn');
 
   addCardForm.reset();
   addNewCard(newCard, cardsContainer);
