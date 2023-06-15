@@ -22,6 +22,7 @@ const popupAddCard = document.querySelector('#popup-add-card');
 const addCardForm = document.querySelector('#add-card-form');
 const inputTitle = addCardForm.querySelector('#title');
 const inputLink = addCardForm.querySelector('#link');
+const submitBtn = addCardForm.querySelector('.form__btn');
 
 // ДЛЯ ОКНА ПРОСМОТРА КАРТИНКИ
 const popupViewImage = document.querySelector('#popup-view-image');
@@ -85,9 +86,7 @@ function createCard(cardData) {
 // -----------------------
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  document.addEventListener('keydown', event => {
-    handleCloseByEsc(popup, event);
-  }, { once: true })
+  document.addEventListener('keydown', handleCloseByEsc);
 }
 
 // -------------------------------
@@ -95,16 +94,31 @@ function openPopup(popup) {
 // -------------------------------
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+
+  const inputElements = Array.from(popup.querySelectorAll('.form__input'));
+  inputElements.forEach(inputElement => {
+    inputElement.classList.remove('form__input_state_error');
+  })
+
+  const inputErrorElements = Array.from(popup.querySelectorAll('.form__input-error'));
+  inputErrorElements.forEach(inputErrorElement => {
+    inputErrorElement.textContent = '';
+  })
+
+  document.removeEventListener('keydown', handleCloseByEsc);
 }
 
 // ----------------------------------------------
 // ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН ПО НАЖАТИЮ ESC
 // ----------------------------------------------
 
-function handleCloseByEsc(popup, event) {
-  if (event.key === 'Escape') {
-    closePopup(popup);
-  }
+function handleCloseByEsc(event) {
+  const popupElements = Array.from(document.querySelectorAll('.popup'));
+  popupElements.forEach(popup => {
+    if (popup.classList.contains('popup_opened') && event.key === 'Escape') {
+      closePopup(popup);
+    }
+  })
 }
 
 // ----------------------------------------
@@ -125,12 +139,6 @@ popupNodeList.forEach(popup => {
       closePopup(popup);
     }
   })
-
-  popup.addEventListener('keydown', event => {
-    if (event.key === "Escape") {
-      closePopup(popup);
-    }
-  })
 })
 
 // -----------------------------------------------
@@ -148,6 +156,9 @@ editProfileBtn.addEventListener('click', () => {
 // --------------------------------------------
 addCardBtn.addEventListener('click', () => {
   openPopup(popupAddCard);
+
+  inputTitle.value = '';
+  inputLink.value = '';
 })
 
 // ----------------------------
@@ -174,8 +185,6 @@ addCardForm.addEventListener('submit', (event) => {
   }
 
   const newCard = createCard(cardData);
-
-  const submitBtn = addCardForm.querySelector('.form__btn');
 
   addCardForm.reset();
   addNewCard(newCard, cardsContainer);
