@@ -93,11 +93,8 @@ function openPopup(popup) {
 // ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН
 // -------------------------------
 function closePopup(popup) {
-  const formElement = popup.querySelector('.form');
-
-  document.removeEventListener('keydown', handleCloseByEsc);
   popup.classList.remove('popup_opened');
-  hideValidationErrors(formElement);
+  document.removeEventListener('keydown', handleCloseByEsc);
 }
 
 // ----------------------------------------------
@@ -107,7 +104,7 @@ function closePopup(popup) {
 function handleCloseByEsc(event) {
   if (event.key === 'Escape') {
     const popupElement = document.querySelector('.popup_opened');
-    closePopup(popupElement)
+    closePopup(popupElement);
   }
 }
 
@@ -136,6 +133,7 @@ popupNodeList.forEach(popup => {
 // -----------------------------------------------
 editProfileBtn.addEventListener('click', () => {
   openPopup(popupEditProfile);
+  hideValidationErrors(editProfileForm);
 
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
@@ -146,6 +144,8 @@ editProfileBtn.addEventListener('click', () => {
 // --------------------------------------------
 addCardBtn.addEventListener('click', () => {
   openPopup(popupAddCard);
+  hideValidationErrors(addCardForm);
+
   addCardForm.reset();
 })
 
