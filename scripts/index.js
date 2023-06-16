@@ -5,7 +5,7 @@ const cardContent = cardTemplate.content;
 const card = cardContent.querySelector('.card');
 
 // СПИСОК МОДАЛЬНЫХ ОКОН
-const popupNodeList = document.querySelectorAll('.popup');
+const popupNodeList = Array.from(document.querySelectorAll('.popup'));
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const profileName = document.querySelector('.profile__name');
@@ -22,7 +22,7 @@ const popupAddCard = document.querySelector('#popup-add-card');
 const addCardForm = document.querySelector('#add-card-form');
 const inputTitle = addCardForm.querySelector('#title');
 const inputLink = addCardForm.querySelector('#link');
-const submitBtn = addCardForm.querySelector('.form__btn');
+const cardFormSubmitBtn = addCardForm.querySelector('.form__btn');
 
 // ДЛЯ ОКНА ПРОСМОТРА КАРТИНКИ
 const popupViewImage = document.querySelector('#popup-view-image');
@@ -93,19 +93,11 @@ function openPopup(popup) {
 // ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН
 // -------------------------------
 function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-
-  const inputElements = Array.from(popup.querySelectorAll('.form__input'));
-  inputElements.forEach(inputElement => {
-    inputElement.classList.remove('form__input_state_error');
-  })
-
-  const inputErrorElements = Array.from(popup.querySelectorAll('.form__input-error'));
-  inputErrorElements.forEach(inputErrorElement => {
-    inputErrorElement.textContent = '';
-  })
+  const formElement = popup.querySelector('.form');
 
   document.removeEventListener('keydown', handleCloseByEsc);
+  popup.classList.remove('popup_opened');
+  hideValidationErrors(formElement);
 }
 
 // ----------------------------------------------
@@ -113,12 +105,10 @@ function closePopup(popup) {
 // ----------------------------------------------
 
 function handleCloseByEsc(event) {
-  const popupElements = Array.from(document.querySelectorAll('.popup'));
-  popupElements.forEach(popup => {
-    if (popup.classList.contains('popup_opened') && event.key === 'Escape') {
-      closePopup(popup);
-    }
-  })
+  if (event.key === 'Escape') {
+    const popupElement = document.querySelector('.popup_opened');
+    closePopup(popupElement)
+  }
 }
 
 // ----------------------------------------
@@ -156,9 +146,7 @@ editProfileBtn.addEventListener('click', () => {
 // --------------------------------------------
 addCardBtn.addEventListener('click', () => {
   openPopup(popupAddCard);
-
-  inputTitle.value = '';
-  inputLink.value = '';
+  addCardForm.reset();
 })
 
 // ----------------------------
@@ -189,5 +177,5 @@ addCardForm.addEventListener('submit', (event) => {
   addCardForm.reset();
   addNewCard(newCard, cardsContainer);
   closePopup(popupAddCard);
-  disableButton(submitBtn);
+  disableButton(cardFormSubmitBtn);
 })

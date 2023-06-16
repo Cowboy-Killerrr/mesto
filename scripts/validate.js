@@ -1,7 +1,5 @@
 function enableValidation(formSelectors) {
-  const formList = Array.from(
-    document.querySelectorAll(formSelectors.formSelector)
-  );
+  const formList = Array.from(document.querySelectorAll(formSelectors.formSelector));
 
   formList.forEach((formElement) => {
     setEventListeners(formElement, formSelectors);
@@ -35,12 +33,8 @@ function checkInputValidity(formElement, inputElement, formSelectors) {
 }
 
 function setEventListeners(formElement, formSelectors) {
-  const inputList = Array.from(
-    formElement.querySelectorAll(formSelectors.inputSelector)
-  );
-  const buttonElement = formElement.querySelector(
-    formSelectors.submitButtonSelector
-  );
+  const inputList = Array.from(formElement.querySelectorAll(formSelectors.inputSelector));
+  const buttonElement = formElement.querySelector(formSelectors.submitButtonSelector);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
@@ -70,6 +64,19 @@ function disableButton(buttonElement) {
 
 function enableButton(buttonElement) {
   buttonElement.disabled = false;
+}
+
+function hideValidationErrors(formElement) {
+  const inputElements = Array.from(formElement.querySelectorAll('.form__input'));
+  const inputErrorElements = Array.from(formElement.querySelectorAll('.form__input-error'));
+
+  inputElements.forEach(inputElement => {
+    inputElement.classList.remove('form__input_state_error');
+  })
+
+  inputErrorElements.forEach(inputErrorElement => {
+    inputErrorElement.textContent = '';
+  })
 }
 
 enableValidation({
