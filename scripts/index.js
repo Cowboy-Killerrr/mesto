@@ -1,8 +1,6 @@
-// ДЛЯ КАРТОЧЕК
-const cardsContainer = document.querySelector('.gallery__list');
-const cardTemplate = document.querySelector('#card-template');
-const cardContent = cardTemplate.content;
-const card = cardContent.querySelector('.card');
+// КЛАССЫ
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
 
 // СПИСОК МОДАЛЬНЫХ ОКОН
 const popupNodeList = document.querySelectorAll('.popup');
@@ -22,68 +20,26 @@ const popupAddCard = document.querySelector('#popup-add-card');
 const addCardForm = document.querySelector('#add-card-form');
 const inputTitle = addCardForm.querySelector('#title');
 const inputLink = addCardForm.querySelector('#link');
-const submitBtn = addCardForm.querySelector('.form__btn');
 
 // ДЛЯ ОКНА ПРОСМОТРА КАРТИНКИ
 const popupViewImage = document.querySelector('#popup-view-image');
-const popupImage = document.querySelector('.popup__image');
-const popupImageTitle = document.querySelector('.popup__image-subtext');
 
-// -----------------------------
-// ДОБАВИТЬ КАРТОЧКУ НА СТРАНИЦУ
-// -----------------------------
-function addNewCard(card, container) {
-  container.prepend(card);
+// ДЛЯ ВАЛИДАЦИИ
+const formSelectors = {
+  formSelector: ".form",
+  inputSelector: ".form__input",
+  submitButtonSelector: ".form__btn",
+  inputErrorClass: "form__input_state_error",
+  inputErrorText: ".form__input-error",
 }
 
-// ------------------
-// ОТРИСОВКА КАРТОЧЕК
-// ------------------
-function createCard(cardData) {
-  const newCard = card.cloneNode(true);
+// ЭКЗЕМПЛЯРЫ КЛАССОВ
+const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
+const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
-  const newCardImage = newCard.querySelector('.card__image');
-  newCardImage.src = cardData.link;
-  newCardImage.alt = cardData.name;
-
-  const newCardTitle = newCard.querySelector('.card__title');
-  newCardTitle.textContent = cardData.name;
-
-  // -------------
-  // ЛАЙК КАРТОЧКИ
-  // -------------
-  const likeBtn = newCard.querySelector('.card__like-btn');
-  likeBtn.addEventListener('click', () => {
-    likeBtn.classList.toggle('card__like-btn_active');
-  })
-
-  // -----------------
-  // УДАЛЕНИЕ КАРТОЧКИ
-  // -----------------
-  const deleteBtn = newCard.querySelector('.card__delete-btn');
-  deleteBtn.addEventListener('click', () => {
-    newCard.remove();
-  })
-
-  // --------------------------
-  // ПРОСМОТР КАРТИНКИ КАРТОЧКИ
-  // --------------------------
-
-  newCardImage.addEventListener('click', () => {
-    openPopup(popupViewImage);
-
-    popupImage.src = cardData.link;
-    popupImage.alt = cardData.name;
-
-    popupImageTitle.textContent = cardData.name;
-  })
-
-  return newCard;
-}
-
-// -----------------------
-// ОТКРЫТИЕ МОДАЛЬНЫХ ОКОН
-// -----------------------
+// -------------------------------
+// ФУНКЦИЯ ОТКРЫТИЯ МОДАЛЬНЫХ ОКОН
+// -------------------------------
 function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', handleCloseByEsc);
@@ -100,7 +56,6 @@ function closePopup(popup) {
 // ----------------------------------------------
 // ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН ПО НАЖАТИЮ ESC
 // ----------------------------------------------
-
 function handleCloseByEsc(event) {
   const popupElements = Array.from(document.querySelectorAll('.popup'));
   popupElements.forEach(popup => {
@@ -114,8 +69,31 @@ function handleCloseByEsc(event) {
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 // ----------------------------------------
 galleryCards.forEach(item => {
-  const newCard = createCard(item);
-  addNewCard(newCard, cardsContainer);
+  const card = new Card(item, '#card-template');
+  const cardElement = card.createCard();
+
+  document.querySelector('.gallery__list').prepend(cardElement);
+})
+
+// -----------------------------------------------
+// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+// -----------------------------------------------
+editProfileBtn.addEventListener('click', () => {
+  openPopup(popupEditProfile);
+  editProfileFormValidation.hideValidationErrors();
+  editProfileFormValidation.enableButton();
+
+  inputName.value = profileName.textContent;
+  inputJob.value = profileJob.textContent;
+})
+
+// --------------------------------------------
+// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
+// --------------------------------------------
+addCardBtn.addEventListener('click', () => {
+  openPopup(popupAddCard);
+  addCardForm.reset();
+  addCardFormValidation.hideValidationErrors();
 })
 
 // ------------------------
@@ -128,23 +106,6 @@ popupNodeList.forEach(popup => {
       closePopup(popup);
     }
   })
-})
-
-// -----------------------------------------------
-// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-// -----------------------------------------------
-editProfileBtn.addEventListener('click', () => {
-  openPopup(popupEditProfile);
-
-  inputName.value = profileName.textContent;
-  inputJob.value = profileJob.textContent;
-})
-
-// --------------------------------------------
-// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
-// --------------------------------------------
-addCardBtn.addEventListener('click', () => {
-  openPopup(popupAddCard);
 })
 
 // ----------------------------
@@ -170,10 +131,17 @@ addCardForm.addEventListener('submit', (event) => {
     link: inputLink.value,
   }
 
-  const newCard = createCard(cardData);
+  const card = new Card(cardData, '#card-template');
+  const cardElement = card.createCard();
+
+  document.querySelector('.gallery__list').prepend(cardElement);
 
   addCardForm.reset();
-  addNewCard(newCard, cardsContainer);
   closePopup(popupAddCard);
-  disableButton(submitBtn);
+  addCardFormValidation.disableButton();
 })
+
+editProfileFormValidation.enableValidation();
+addCardFormValidation.enableValidation();
+
+export { openPopup, popupViewImage };
