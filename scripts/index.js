@@ -20,7 +20,6 @@ const popupAddCard = document.querySelector('#popup-add-card');
 const addCardForm = document.querySelector('#add-card-form');
 const inputTitle = addCardForm.querySelector('#title');
 const inputLink = addCardForm.querySelector('#link');
-const cardFormSubmitBtn = addCardForm.querySelector('.form__btn');
 
 // ДЛЯ ОКНА ПРОСМОТРА КАРТИНКИ
 const popupViewImage = document.querySelector('#popup-view-image');
@@ -106,27 +105,6 @@ popupNodeList.forEach(popup => {
       closePopup(popup);
     }
   })
-})
-
-// -----------------------------------------------
-// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-// -----------------------------------------------
-editProfileBtn.addEventListener('click', () => {
-  openPopup(popupEditProfile);
-  hideValidationErrors(editProfileForm);
-
-  inputName.value = profileName.textContent;
-  inputJob.value = profileJob.textContent;
-})
-
-// --------------------------------------------
-// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
-// --------------------------------------------
-addCardBtn.addEventListener('click', () => {
-  openPopup(popupAddCard);
-  hideValidationErrors(addCardForm);
-
-  addCardForm.reset();
 })
 
 // ----------------------------
