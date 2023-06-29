@@ -15,6 +15,7 @@ const inputName = editProfileForm.querySelector('#name');
 const inputJob = editProfileForm.querySelector('#job');
 
 // ДЛЯ ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
+const galleryList = document.querySelector('.gallery__list');
 const addCardBtn = document.querySelector('.profile__btn_type_add');
 const popupAddCard = document.querySelector('#popup-add-card');
 const addCardForm = document.querySelector('#add-card-form');
@@ -22,13 +23,16 @@ const inputTitle = addCardForm.querySelector('#title');
 const inputLink = addCardForm.querySelector('#link');
 
 // ДЛЯ ОКНА ПРОСМОТРА КАРТИНКИ
-const popupViewImage = document.querySelector('#popup-view-image');
+const popupViewCardImage = document.querySelector('#popup-view-image');
+const popupImage = popupViewCardImage.querySelector('.popup__image');
+const popupImageSubtext = popupViewCardImage.querySelector('.popup__image-subtext');
 
 // ДЛЯ ВАЛИДАЦИИ
 const formSelectors = {
   formSelector: ".form",
   inputSelector: ".form__input",
   submitButtonSelector: ".form__btn",
+  submitButtonDisabled: "form__btn_disabled",
   inputErrorClass: "form__input_state_error",
   inputErrorText: ".form__input-error",
 }
@@ -38,24 +42,35 @@ const editProfileFormValidation = new FormValidator(formSelectors, editProfileFo
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
 // -------------------------------
-// ФУНКЦИЯ ОТКРЫТИЯ МОДАЛЬНЫХ ОКОН
+// ФУНКЦИИ ОТКРЫТИЯ МОДАЛЬНЫХ ОКОН
 // -------------------------------
 function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', handleCloseByEsc);
 }
 
+function openEditProfilePopup() {
+  openPopup(popupEditProfile);
+  editProfileFormValidation.hideValidationErrors();
+  editProfileFormValidation.enableButton();
+
+  inputName.value = profileName.textContent;
+  inputJob.value = profileJob.textContent;
+}
+
+function openAddCardPopup() {
+  openPopup(popupAddCard);
+  addCardForm.reset();
+  addCardFormValidation.hideValidationErrors();
+}
+
 // -------------------------------
-// ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН
+// ФУНКЦИИ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН
 // -------------------------------
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', handleCloseByEsc);
 }
-
-// ----------------------------------------------
-// ФУНКЦИЯ ЗАКРЫТИЯ МОДАЛЬНЫХ ОКОН ПО НАЖАТИЮ ESC
-// ----------------------------------------------
 
 function handleCloseByEsc(event) {
   if (event.key === 'Escape') {
@@ -64,36 +79,55 @@ function handleCloseByEsc(event) {
   }
 }
 
+// ---------------------------------------
+// ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
+// ---------------------------------------
+function createCardInstance(cardData) {
+  return new Card(cardData, '#card-template');
+}
+
+// ---------------------
+// ФУНКЦИИ САБМИТОВ ФОРМ
+// ---------------------
+function editProfileFormSubmit(event) {
+  event.preventDefault();
+
+  profileName.textContent = inputName.value;
+  profileJob.textContent = inputJob.value;
+
+  closePopup(popupEditProfile);
+}
+
+function addCardFormSubmit(event) {
+  event.preventDefault();
+
+  const cardData = {
+    name: inputTitle.value,
+    link: inputLink.value,
+  }
+
+  const cardElement = createCardInstance(cardData).createCard();
+
+  addCardFormValidation.disableButton();
+  addCardForm.reset();
+  galleryList.prepend(cardElement);
+
+  closePopup(popupAddCard);
+}
+
 // ----------------------------------------
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 // ----------------------------------------
 galleryCards.forEach(item => {
-  const card = new Card(item, '#card-template');
-  const cardElement = card.createCard();
-
-  document.querySelector('.gallery__list').prepend(cardElement);
+  const cardElement = createCardInstance(item).createCard();
+  galleryList.prepend(cardElement);
 })
 
-// -----------------------------------------------
 // ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-// -----------------------------------------------
-editProfileBtn.addEventListener('click', () => {
-  openPopup(popupEditProfile);
-  editProfileFormValidation.hideValidationErrors();
-  editProfileFormValidation.enableButton();
+editProfileBtn.addEventListener('click', openEditProfilePopup);
 
-  inputName.value = profileName.textContent;
-  inputJob.value = profileJob.textContent;
-})
-
-// --------------------------------------------
 // ОТКРЫТИЕ МОДАЛЬНОГО ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
-// --------------------------------------------
-addCardBtn.addEventListener('click', () => {
-  openPopup(popupAddCard);
-  addCardForm.reset();
-  addCardFormValidation.hideValidationErrors();
-})
+addCardBtn.addEventListener('click', openAddCardPopup);
 
 // ------------------------
 // ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
@@ -107,40 +141,14 @@ popupNodeList.forEach(popup => {
   })
 })
 
-// ----------------------------
-// ФОРМА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-// ----------------------------
-editProfileForm.addEventListener('submit', (event) => {
-  event.preventDefault();
+// ОБРАБОТЧИК САБМИТА ФОРМЫ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+editProfileForm.addEventListener('submit', editProfileFormSubmit);
 
-  profileName.textContent = inputName.value;
-  profileJob.textContent = inputJob.value;
+// ОБРАБОТЧИК САБМИТА ФОРМЫ ДОБАВЛЕНИЯ КАРТОЧКИ
+addCardForm.addEventListener('submit', addCardFormSubmit)
 
-  closePopup(popupEditProfile);
-})
-
-// -------------------------
-// ФОРМА ДОБАВЛЕНИЯ КАРТОЧКИ
-// -------------------------
-addCardForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const cardData = {
-    name: inputTitle.value,
-    link: inputLink.value,
-  }
-
-  const card = new Card(cardData, '#card-template');
-  const cardElement = card.createCard();
-
-  document.querySelector('.gallery__list').prepend(cardElement);
-
-  addCardForm.reset();
-  closePopup(popupAddCard);
-  addCardFormValidation.disableButton();
-})
-
+// ВАЛИДАЦИЯ ФОРМ
 editProfileFormValidation.enableValidation();
 addCardFormValidation.enableValidation();
 
-export { openPopup, popupViewImage };
+export { openPopup, popupViewCardImage, popupImage, popupImageSubtext };

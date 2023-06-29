@@ -1,4 +1,4 @@
-import { openPopup, popupViewImage } from "./index.js";
+import { openPopup, popupViewCardImage, popupImage, popupImageSubtext } from "./index.js";
 
 export default class Card {
   constructor(data, templateSelector) {
@@ -8,11 +8,9 @@ export default class Card {
   }
 
   _getTemplate() {
-    const cardElement = document
+    return document
       .querySelector(this._templateSelector).content
       .querySelector('.card').cloneNode(true);
-
-    return cardElement;
   }
 
   _handleCardDelete() {
@@ -24,11 +22,11 @@ export default class Card {
   }
 
   _handleViewCardImage() {
-    openPopup(popupViewImage);
+    openPopup(popupViewCardImage);
 
-    document.querySelector('.popup__image').src = this._cardLink;
-    document.querySelector('.popup__image').alt = this._cardName;
-    document.querySelector('.popup__image-subtext').textContent = this._cardName;
+    popupImage.src = this._cardLink;
+    popupImage.alt = this._cardName;
+    popupImageSubtext.textContent = this._cardName;
   }
 
   _setEventListeners() {
