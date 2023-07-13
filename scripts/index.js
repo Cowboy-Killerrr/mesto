@@ -6,6 +6,7 @@ import { galleryCards } from './cards.js';
 // КЛАССЫ
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
+import Section from './Section';
 
 // СПИСОК МОДАЛЬНЫХ ОКОН
 const popupNodeList = Array.from(document.querySelectorAll('.popup'));
@@ -84,12 +85,18 @@ function handleCloseByEsc(event) {
   }
 }
 
-// ---------------------------------------
-// ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
-// ---------------------------------------
-function createCardInstance(cardData) {
-  return new Card(cardData, '#card-template').createCard();
-}
+// ----------------------------------------
+// ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+// ----------------------------------------
+const cardList = new Section({
+  data: galleryCards,
+  renderer: (item) => {
+    const newCard = new Card(item, '#card-template').createCard();
+    cardList.addItem(newCard);
+  }
+}, '#gallery-list');
+
+cardList.renderItems();
 
 // ---------------------
 // ФУНКЦИИ САБМИТОВ ФОРМ
@@ -113,18 +120,12 @@ function addCardFormSubmit(event) {
 
   addCardFormValidation.disableButton();
   addCardForm.reset();
-  galleryList.prepend(createCardInstance(cardData));
+
+  const newCard = new Card(cardData, '#card-template').createCard();
+  cardList.addItem(newCard);
 
   closePopup(popupAddCard);
 }
-
-// ----------------------------------------
-// ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-// ----------------------------------------
-galleryCards.forEach(item => {
-  const cardElement = createCardInstance(item);
-  galleryList.prepend(cardElement);
-})
 
 // ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 editProfileBtn.addEventListener('click', openEditProfilePopup);

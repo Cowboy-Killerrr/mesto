@@ -1,5 +1,5 @@
 const fujiyamaImage = new URL('../images/fujiyama.jpg', import.meta.url);
-const eifelTowerImage = new URL('../images/eifel-tower.jpg', import.meta.url);
+const parisImage = new URL('../images/eifel-tower.jpg', import.meta.url);
 const goldenGateImage = new URL('../images/golden-gate.jpg', import.meta.url);
 const mormonRowImage = new URL('../images/mormon-row.jpg', import.meta.url);
 const comoLakeImage = new URL('../images/como-lake.jpg', import.meta.url);
@@ -12,7 +12,7 @@ const galleryCards = [
   },
   {
     name: 'Париж',
-    link: eifelTowerImage
+    link: parisImage
   },
   {
     name: 'Золотые Ворота',
