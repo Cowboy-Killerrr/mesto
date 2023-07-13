@@ -1,3 +1,8 @@
+import '../pages/index.css';
+
+// МАССИВ ИЗОБРАЖЕНИЙ
+import { galleryCards } from './cards.js';
+
 // КЛАССЫ
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
