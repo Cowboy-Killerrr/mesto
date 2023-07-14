@@ -9,6 +9,7 @@ import Card from './Card';
 import FormValidator from './FormValidator';
 import Section from './Section';
 import Popup from './Popup';
+import PopupWithImage from './PopupWithImage';
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const profileName = document.querySelector('.profile__name');
@@ -68,23 +69,18 @@ addCardBtn.addEventListener('click', () => {
   addCardFormValidation.hideValidationErrors();
 });
 
-
-
-
-
-
-function openPopup(popup) {
-  // popup.classList.add('popup_opened');
-  // document.addEventListener('keydown', handleCloseByEsc);
-}
-
 // ----------------------------------------
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 // ----------------------------------------
 const cardList = new Section({
   data: galleryCards,
   renderer: (item) => {
-    const newCard = new Card(item, '#card-template').createCard();
+    const newCard = new Card(item, { handleCardClick: (event) => {
+      if (event.target.classList.contains('card__image')) {
+        const popupWithImage = new PopupWithImage(newCard, '#popup-view-image');
+        popupWithImage.open();
+      }
+    } }, '#card-template').createCard();
     cardList.addItem(newCard);
   }
 }, '#gallery-list');
@@ -114,10 +110,15 @@ function addCardFormSubmit(event) {
   addCardFormValidation.disableButton();
   addCardForm.reset();
 
-  const newCard = new Card(cardData, '#card-template').createCard();
+  const newCard = new Card(cardData, { handleCardClick: (event) => {
+    if (event.target.classList.contains('card__image')) {
+      const popupWithImage = new PopupWithImage(newCard, '#popup-view-image');
+      popupWithImage.open();
+    }
+  } }, '#card-template').createCard();
   cardList.addItem(newCard);
 
-  closePopup(popupAddCard);
+  popupAddCard.close();
 }
 
 // ОБРАБОТЧИК САБМИТА ФОРМЫ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
@@ -129,5 +130,3 @@ addCardForm.addEventListener('submit', addCardFormSubmit)
 // ВАЛИДАЦИЯ ФОРМ
 editProfileFormValidation.enableValidation();
 addCardFormValidation.enableValidation();
-
-export { openPopup, popupViewCardImage, popupImage, popupImageSubtext };
