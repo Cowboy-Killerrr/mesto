@@ -8,8 +8,8 @@ import { galleryCards } from './cards.js';
 import Card from './Card';
 import FormValidator from './FormValidator';
 import Section from './Section';
-import Popup from './Popup';
 import PopupWithImage from './PopupWithImage';
+import PopupWithForm from './PopupWithForm';
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const profileName = document.querySelector('.profile__name');
@@ -22,12 +22,6 @@ const inputJob = editProfileForm.querySelector('#job');
 // ДЛЯ ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
 const addCardBtn = document.querySelector('.profile__btn_type_add');
 const addCardForm = document.querySelector('#add-card-form');
-const inputTitle = addCardForm.querySelector('#title');
-const inputLink = addCardForm.querySelector('#link');
-
-// ДЛЯ ОКНА ПРОСМОТРА КАРТИНКИ
-const popupImage = document.querySelector('.popup__image');
-const popupImageSubtext = document.querySelector('.popup__image-subtext');
 
 // ДЛЯ ВАЛИДАЦИИ
 const formSelectors = {
@@ -43,12 +37,42 @@ const formSelectors = {
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
-// -------------------------------
-// ФУНКЦИИ ОТКРЫТИЯ МОДАЛЬНЫХ ОКОН
-// -------------------------------
-const popupEditProfile = new Popup('#popup-edit-profile');
-const popupAddCard = new Popup('#popup-add-card');
-const popupViewCardImage = new Popup('#popup-view-image');
+// -----------------------
+// МОДАЛЬНЫЕ ОКНА С ФОРМОЙ
+// -----------------------
+const popupEditProfile = new PopupWithForm({
+  formSubmitCallback: (event, inputListValues) => {
+
+      event.preventDefault();
+
+      profileName.textContent = inputListValues[0];
+      profileJob.textContent = inputListValues[1];
+
+      popupEditProfile.close();
+
+  } },'#popup-edit-profile');
+
+const popupAddCard = new PopupWithForm({
+  formSubmitCallback: (event, inputListValues) => {
+    event.preventDefault();
+
+    const cardData = {
+      name: inputListValues[0],
+      link: inputListValues[1],
+    }
+
+    const newCard = new Card(cardData, { handleCardClick: (event) => {
+      if (event.target.classList.contains('card__image')) {
+        const popupWithImage = new PopupWithImage(newCard, '#popup-view-image');
+        popupWithImage.open();
+      }
+    } }, '#card-template').createCard();
+    cardList.addItem(newCard);
+
+    popupAddCard.close();
+
+  } },'#popup-add-card');
+
 
 // ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 
@@ -65,8 +89,8 @@ editProfileBtn.addEventListener('click', () => {
 addCardBtn.addEventListener('click', () => {
   popupAddCard.open();
 
-  addCardForm.reset();
   addCardFormValidation.hideValidationErrors();
+  addCardFormValidation.disableButton();
 });
 
 // ----------------------------------------
@@ -86,46 +110,6 @@ const cardList = new Section({
 }, '#gallery-list');
 
 cardList.renderItems();
-
-// ---------------------
-// ФУНКЦИИ САБМИТОВ ФОРМ
-// ---------------------
-function editProfileFormSubmit(event) {
-  event.preventDefault();
-
-  profileName.textContent = inputName.value;
-  profileJob.textContent = inputJob.value;
-
-  popupEditProfile.close();
-}
-
-function addCardFormSubmit(event) {
-  event.preventDefault();
-
-  const cardData = {
-    name: inputTitle.value,
-    link: inputLink.value,
-  }
-
-  addCardFormValidation.disableButton();
-  addCardForm.reset();
-
-  const newCard = new Card(cardData, { handleCardClick: (event) => {
-    if (event.target.classList.contains('card__image')) {
-      const popupWithImage = new PopupWithImage(newCard, '#popup-view-image');
-      popupWithImage.open();
-    }
-  } }, '#card-template').createCard();
-  cardList.addItem(newCard);
-
-  popupAddCard.close();
-}
-
-// ОБРАБОТЧИК САБМИТА ФОРМЫ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-editProfileForm.addEventListener('submit', editProfileFormSubmit);
-
-// ОБРАБОТЧИК САБМИТА ФОРМЫ ДОБАВЛЕНИЯ КАРТОЧКИ
-addCardForm.addEventListener('submit', addCardFormSubmit)
 
 // ВАЛИДАЦИЯ ФОРМ
 editProfileFormValidation.enableValidation();
