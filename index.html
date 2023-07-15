@@ -4,19 +4,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./pages/index.css" />
     <title>Mesto</title>
+    <script src="./scripts/cards.js" defer></script>
+    <script type="module" src="./scripts/index.js" defer></script>
   </head>
   <body class="page">
     <!-- header -->
     <header class="header">
-      <img src="<%=require('./images/svg/logo.svg')%>" alt="Место" class="header__logo" />
+      <img src="./images/svg/logo.svg" alt="Место" class="header__logo" />
     </header>
 
     <main class="main">
       <!-- profile -->
       <section class="profile">
         <img
-          src="<%=require('./images/avatar.jpg')%>"
+          src="./images/avatar.jpg"
           alt="Фотография профиля"
           class="profile__avatar"
         />
@@ -38,7 +41,7 @@
 
       <!-- gallery -->
       <section class="gallery">
-        <ul id="gallery-list" class="gallery__list"></ul>
+        <ul class="gallery__list"></ul>
       </section>
     </main>
 
