@@ -1,26 +1,35 @@
+const fujiyamaImage = new URL('../images/fujiyama.jpg', import.meta.url);
+const parisImage = new URL('../images/eifel-tower.jpg', import.meta.url);
+const goldenGateImage = new URL('../images/golden-gate.jpg', import.meta.url);
+const mormonRowImage = new URL('../images/mormon-row.jpg', import.meta.url);
+const comoLakeImage = new URL('../images/como-lake.jpg', import.meta.url);
+const lincolnHeightsImage = new URL('../images/lincoln-heights.jpg', import.meta.url);
+
 const galleryCards = [
   {
     name: 'Вулкан Фудзияма',
-    link: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+    link: fujiyamaImage
   },
   {
     name: 'Париж',
-    link: 'https://images.unsplash.com/photo-1431274172761-fca41d930114?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    link: parisImage
   },
   {
     name: 'Золотые Ворота',
-    link: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80'
+    link: goldenGateImage
   },
   {
     name: 'Мормон Роу',
-    link: 'https://images.unsplash.com/photo-1610687660051-9fe41058f9b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80'
+    link: mormonRowImage
   },
   {
     name: 'Озеро Комо',
-    link: 'https://images.unsplash.com/photo-1606521276375-5fbc52665c8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+    link: comoLakeImage
   },
   {
-    name: 'Сильверлейк',
-    link: 'https://images.unsplash.com/photo-1517438020812-01a8eeb72f69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+    name: 'Линкольн Хайтс',
+    link: lincolnHeightsImage
   },
 ];
+
+export { galleryCards };
