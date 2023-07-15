@@ -10,6 +10,7 @@ import FormValidator from './FormValidator';
 import Section from './Section';
 import PopupWithImage from './PopupWithImage';
 import PopupWithForm from './PopupWithForm';
+import UserInfo from './UserInfo';
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const profileName = document.querySelector('.profile__name');
@@ -23,7 +24,7 @@ const inputJob = editProfileForm.querySelector('#job');
 const addCardBtn = document.querySelector('.profile__btn_type_add');
 const addCardForm = document.querySelector('#add-card-form');
 
-// ДЛЯ ВАЛИДАЦИИ
+// СЕЛЕКТОРЫ ДЛЯ ВАЛИДАЦИИ
 const formSelectors = {
   formSelector: ".form",
   inputSelector: ".form__input",
@@ -33,20 +34,26 @@ const formSelectors = {
   inputErrorText: ".form__input-error",
 }
 
-// ЭКЗЕМПЛЯРЫ КЛАССОВ
+// ЭКЗЕМПЛЯРЫ КЛАССОВ ДЛЯ ВАЛИДАЦИИ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
-// -----------------------
+// ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
+const userInfo = new UserInfo({
+  userName: profileName.textContent,
+  userJob: profileJob.textContent
+});
+
 // МОДАЛЬНЫЕ ОКНА С ФОРМОЙ
-// -----------------------
 const popupEditProfile = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
 
       event.preventDefault();
 
-      profileName.textContent = inputListValues[0];
-      profileJob.textContent = inputListValues[1];
+      userInfo.setUserInfo({
+        userName: inputListValues[0],
+        userJob: inputListValues[1]
+      })
 
       popupEditProfile.close();
 
@@ -74,16 +81,17 @@ const popupAddCard = new PopupWithForm({
   } },'#popup-add-card');
 
 
-// ОТКРЫТИЕ МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-
+// ОТКРЫТИЕ МОДАЛЬНЫХ ОКОН
 editProfileBtn.addEventListener('click', () => {
   popupEditProfile.open();
 
   editProfileFormValidation.hideValidationErrors();
   editProfileFormValidation.enableButton();
 
-  inputName.value = profileName.textContent;
-  inputJob.value = profileJob.textContent;
+  const currentUserInfo = userInfo.getUserInfo();
+
+  inputName.value = currentUserInfo.userName;
+  inputJob.value = currentUserInfo.userJob;
 });
 
 addCardBtn.addEventListener('click', () => {
@@ -93,9 +101,7 @@ addCardBtn.addEventListener('click', () => {
   addCardFormValidation.disableButton();
 });
 
-// ----------------------------------------
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-// ----------------------------------------
 const cardList = new Section({
   data: galleryCards,
   renderer: (item) => {
