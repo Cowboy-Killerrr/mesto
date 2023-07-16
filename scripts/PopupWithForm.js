@@ -4,12 +4,12 @@ export default class PopupWithForm extends Popup {
   constructor({ formSubmitCallback }, popupSelector) {
     super(popupSelector);
     this._formSubmitCallback = formSubmitCallback;
-    this._formElement = this._popupSelector.querySelector('.form');
+    this._formElement = this._popupElement.querySelector('.form');
   }
 
   _getInputValues() {
     this._inputValues = [];
-    this._inputElementsList = Array.from(this._popupSelector.querySelectorAll('.form__input'));
+    this._inputElementsList = Array.from(this._popupElement.querySelectorAll('.form__input'));
 
     this._inputElementsList.forEach(inputElement => {
       this._inputValues.push(inputElement.value);
@@ -18,26 +18,26 @@ export default class PopupWithForm extends Popup {
     return this._inputValues;
   }
 
-  setEventListeners() {
-    this._popupSelector.addEventListener('click', event => {
-      this._classList = event.target.classList;
+  // _setEventListeners() {
+  //   this._popupElement.addEventListener('click', event => {
+  //     this._classList = event.target.classList;
 
-      if (this._classList.contains('popup_opened') || this._classList.contains('popup__btn_type_close')) {
-        this.close();
-      }
-    });
+  //     if (this._classList.contains('popup_opened') || this._classList.contains('popup__btn_type_close')) {
+  //       this.close();
+  //     }
+  //   });
 
-    document.addEventListener('keydown', this._handleEscClose.bind(this));
+  //   document.addEventListener('keydown', this._handleEscClose.bind(this));
 
-    this._formElement.addEventListener('submit', event => {
-      this._formSubmitCallback(event, this._getInputValues());
-    }, { once: true });
+  //   this._formElement.addEventListener('submit', event => {
+  //     this._formSubmitCallback(event, this._getInputValues());
+  //   }, { once: true });
 
-  }
+  // }
 
-  close() {
-    this._popupSelector.classList.remove('popup_opened');
+  // close() {
+  //   this._popupElement.classList.remove('popup_opened');
 
-    this._formElement.reset();
-  }
+  //   this._formElement.reset();
+  // }
 }
