@@ -1,0 +1,13 @@
+# ФАЙЛЫ
+# .gitignore
+# *.json
+
+# ПАПКИ
+node_modules
+dist
+
+# КОНФИГИ
+# .editorconfig
+# webpack.config.js
+# babel.config.js
+# postcss.config.js
