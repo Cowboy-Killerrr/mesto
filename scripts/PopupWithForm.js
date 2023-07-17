@@ -18,26 +18,17 @@ export default class PopupWithForm extends Popup {
     return this._inputValues;
   }
 
-  // _setEventListeners() {
-  //   this._popupElement.addEventListener('click', event => {
-  //     this._classList = event.target.classList;
+  _setEventListeners() {
+    super._setEventListeners();
 
-  //     if (this._classList.contains('popup_opened') || this._classList.contains('popup__btn_type_close')) {
-  //       this.close();
-  //     }
-  //   });
+    this._formElement.addEventListener('submit', event => {
+      this._formSubmitCallback(event, this._getInputValues());
+    }, { once: true });
+  }
 
-  //   document.addEventListener('keydown', this._handleEscClose.bind(this));
+  close() {
+    super.close();
 
-  //   this._formElement.addEventListener('submit', event => {
-  //     this._formSubmitCallback(event, this._getInputValues());
-  //   }, { once: true });
-
-  // }
-
-  // close() {
-  //   this._popupElement.classList.remove('popup_opened');
-
-  //   this._formElement.reset();
-  // }
+    this._formElement.reset();
+  }
 }
