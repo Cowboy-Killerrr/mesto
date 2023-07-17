@@ -70,8 +70,8 @@ const popupAddCard = new PopupWithForm({
 
     const newCard = new Card(cardData, { handleCardClick: (event) => {
       if (event.target.classList.contains('card__image')) {
-        const popupWithImage = new PopupWithImage(newCard, '#popup-view-image');
-        popupWithImage.open();
+        const popupWithImage = new PopupWithImage('#popup-view-image');
+        popupWithImage.open(cardData);
       }
     } }, '#card-template').createCard();
     cardList.addItem(newCard);
@@ -107,8 +107,8 @@ const cardList = new Section({
   renderer: (item) => {
     const newCard = new Card(item, { handleCardClick: (event) => {
       if (event.target.classList.contains('card__image')) {
-        const popupWithImage = new PopupWithImage(newCard, '#popup-view-image');
-        popupWithImage.open();
+        const popupWithImage = new PopupWithImage('#popup-view-image');
+        popupWithImage.open(item);
       }
     } }, '#card-template').createCard();
     cardList.addItem(newCard);
