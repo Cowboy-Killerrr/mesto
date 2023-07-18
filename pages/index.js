@@ -2,19 +2,17 @@
 import '../pages/index.css';
 
 // МАССИВ ИЗОБРАЖЕНИЙ
-import { galleryCards } from './cards.js';
+import { galleryCards } from '../scripts/cards.js';
 
 // КЛАССЫ
-import Card from './Card';
-import FormValidator from './FormValidator';
-import Section from './Section';
-import PopupWithImage from './PopupWithImage';
-import PopupWithForm from './PopupWithForm';
-import UserInfo from './UserInfo';
+import Card from '../components/Card';
+import FormValidator from '../components/FormValidator';
+import Section from '../components/Section';
+import PopupWithImage from '../components/PopupWithImage';
+import PopupWithForm from '../components/PopupWithForm';
+import UserInfo from '../components/UserInfo';
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-const profileName = document.querySelector('.profile__name');
-const profileJob = document.querySelector('.profile__job');
 const editProfileBtn = document.querySelector('.profile__btn_type_edit');
 const editProfileForm = document.querySelector('#edit-profile-form');
 const inputName = editProfileForm.querySelector('#name');
@@ -34,38 +32,24 @@ const formSelectors = {
   inputErrorText: ".form__input-error",
 }
 
-// ЭКЗЕМПЛЯРЫ КЛАССОВ ДЛЯ ВАЛИДАЦИИ
+// ЭКЗЕМПЛЯРЫ КЛАССОВ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
-
-// ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
 const userInfo = new UserInfo(() => { userInfo.getUserInfo() });
-
 const popupWithImage = new PopupWithImage('#popup-view-image');
-
-function createCardInstance(cardData) {
-  const newCard = new Card(cardData, { handleCardClick: () => {
-
-    popupWithImage.open(cardData);
-
-  } }, '#card-template').createCard();
-  cardList.addItem(newCard);
-}
-
-
 
 // МОДАЛЬНЫЕ ОКНА С ФОРМОЙ
 const popupEditProfile = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
 
-      event.preventDefault();
+    event.preventDefault();
 
-      userInfo.setUserInfo({
-        userName: inputListValues[0],
-        userJob: inputListValues[1]
-      })
+    userInfo.setUserInfo({
+      userName: inputListValues[0],
+      userJob: inputListValues[1]
+    })
 
-      popupEditProfile.close();
+    popupEditProfile.close();
 
   }
 },'#popup-edit-profile');
@@ -86,6 +70,25 @@ const popupAddCard = new PopupWithForm({
   }
 },'#popup-add-card');
 
+// ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+const cardList = new Section({
+  data: galleryCards,
+  renderer: (item) => {
+    createCardInstance(item);
+  }
+}, '#gallery-list');
+
+cardList.renderItems();
+
+// ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
+function createCardInstance(cardData) {
+  const newCard = new Card(cardData, { handleCardClick: () => {
+
+    popupWithImage.open(cardData);
+
+  } }, '#card-template').createCard();
+  cardList.addItem(newCard);
+}
 
 // ОТКРЫТИЕ МОДАЛЬНЫХ ОКОН
 editProfileBtn.addEventListener('click', () => {
@@ -106,16 +109,6 @@ addCardBtn.addEventListener('click', () => {
   addCardFormValidation.hideValidationErrors();
   addCardFormValidation.disableButton();
 });
-
-// ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-const cardList = new Section({
-  data: galleryCards,
-  renderer: (item) => {
-    createCardInstance(item);
-  }
-}, '#gallery-list');
-
-cardList.renderItems();
 
 // ВАЛИДАЦИЯ ФОРМ
 editProfileFormValidation.enableValidation();
