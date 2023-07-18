@@ -39,10 +39,20 @@ const editProfileFormValidation = new FormValidator(formSelectors, editProfileFo
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
 // ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
-const userInfo = new UserInfo({
-  userName: profileName.textContent,
-  userJob: profileJob.textContent
-});
+const userInfo = new UserInfo(() => { userInfo.getUserInfo() });
+
+const popupWithImage = new PopupWithImage('#popup-view-image');
+
+function createCardInstance(cardData) {
+  const newCard = new Card(cardData, { handleCardClick: () => {
+
+    popupWithImage.open(cardData);
+
+  } }, '#card-template').createCard();
+  cardList.addItem(newCard);
+}
+
+
 
 // МОДАЛЬНЫЕ ОКНА С ФОРМОЙ
 const popupEditProfile = new PopupWithForm({
@@ -57,7 +67,8 @@ const popupEditProfile = new PopupWithForm({
 
       popupEditProfile.close();
 
-  } },'#popup-edit-profile');
+  }
+},'#popup-edit-profile');
 
 const popupAddCard = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
@@ -68,17 +79,12 @@ const popupAddCard = new PopupWithForm({
       link: inputListValues[1],
     }
 
-    const newCard = new Card(cardData, { handleCardClick: (event) => {
-      if (event.target.classList.contains('card__image')) {
-        const popupWithImage = new PopupWithImage('#popup-view-image');
-        popupWithImage.open(cardData);
-      }
-    } }, '#card-template').createCard();
-    cardList.addItem(newCard);
+    createCardInstance(cardData);
 
     popupAddCard.close();
 
-  } },'#popup-add-card');
+  }
+},'#popup-add-card');
 
 
 // ОТКРЫТИЕ МОДАЛЬНЫХ ОКОН
@@ -105,13 +111,7 @@ addCardBtn.addEventListener('click', () => {
 const cardList = new Section({
   data: galleryCards,
   renderer: (item) => {
-    const newCard = new Card(item, { handleCardClick: (event) => {
-      if (event.target.classList.contains('card__image')) {
-        const popupWithImage = new PopupWithImage('#popup-view-image');
-        popupWithImage.open(item);
-      }
-    } }, '#card-template').createCard();
-    cardList.addItem(newCard);
+    createCardInstance(item);
   }
 }, '#gallery-list');
 
