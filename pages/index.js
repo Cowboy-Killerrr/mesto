@@ -35,7 +35,10 @@ const formSelectors = {
 // ЭКЗЕМПЛЯРЫ КЛАССОВ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
+
 const userInfo = new UserInfo(() => { userInfo.getUserInfo() });
+userInfo.getUserInfo();
+
 const popupWithImage = new PopupWithImage('#popup-view-image');
 
 // МОДАЛЬНЫЕ ОКНА С ФОРМОЙ
