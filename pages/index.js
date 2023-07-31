@@ -32,6 +32,8 @@ const formSelectors = {
   inputErrorText: ".form__input-error",
 }
 
+let cardList;
+
 // ЭКЗЕМПЛЯРЫ КЛАССОВ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
@@ -66,7 +68,7 @@ const popupAddCard = new PopupWithForm({
       link: inputListValues[1],
     }
 
-    createCardInstance(cardData);
+    cardList.addItem( createCardInstance(cardData) )
 
     popupAddCard.close();
 
@@ -74,14 +76,31 @@ const popupAddCard = new PopupWithForm({
 },'#popup-add-card');
 
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-const cardList = new Section({
-  data: galleryCards,
-  renderer: (item) => {
-    createCardInstance(item);
-  }
-}, '#gallery-list');
+function fetchCardData() {
+  return fetch('https://mesto.nomoreparties.co/v1/cohort-72/cards', {
+    headers: {
+      authorization: '4de05b98-5a9e-448b-915c-192900b934bb'
+    }
+  })
+  .then(response => { return response.json() })
+}
 
-cardList.renderItems();
+fetchCardData()
+  .then(cardData => {
+    cardList = new Section({
+      data: cardData,
+      renderer: (item) => {
+
+        cardList.addItem( createCardInstance(item) );
+
+      }
+    }, '#gallery-list');
+
+    return cardList;
+  })
+  .then(cardList => {
+    cardList.renderItems();
+  })
 
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
 function createCardInstance(cardData) {
@@ -90,7 +109,8 @@ function createCardInstance(cardData) {
     popupWithImage.open(cardData);
 
   } }, '#card-template').createCard();
-  cardList.addItem(newCard);
+
+  return newCard;
 }
 
 // ОТКРЫТИЕ МОДАЛЬНЫХ ОКОН
@@ -116,3 +136,6 @@ addCardBtn.addEventListener('click', () => {
 // ВАЛИДАЦИЯ ФОРМ
 editProfileFormValidation.enableValidation();
 addCardFormValidation.enableValidation();
+
+
+

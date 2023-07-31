@@ -14,7 +14,7 @@ export default class UserInfo {
     })
       .then(response => {
         if (!response.ok) {
-          console.error(`Произошла ошибка: Код ${response.status}`);
+          return Promise.reject(`Ошибка: ${response.status}`);
         }
 
         return response.json()
