@@ -33,15 +33,15 @@ export default class UserInfo {
     this._fetchUserInfo();
 
     this.userData = {
-      userName: this._userNameSelector.textContent,
-      userJob: this._userJobSelector.textContent
+      name: this._userNameSelector.textContent,
+      about: this._userJobSelector.textContent
     }
 
     return this.userData;
   }
 
   setUserInfo(newUserData) {
-    this._userNameSelector.textContent = newUserData.userName;
-    this._userJobSelector.textContent = newUserData.userJob;
+    this._userNameSelector.textContent = newUserData.name;
+    this._userJobSelector.textContent = newUserData.about;
   }
 }

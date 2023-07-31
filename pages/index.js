@@ -44,15 +44,37 @@ userInfo.getUserInfo();
 const popupWithImage = new PopupWithImage('#popup-view-image');
 
 // МОДАЛЬНЫЕ ОКНА С ФОРМОЙ
+// function updateUserData() {
+//   return
+// }
+
 const popupEditProfile = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
 
     event.preventDefault();
 
-    userInfo.setUserInfo({
-      userName: inputListValues[0],
-      userJob: inputListValues[1]
+    const userData = {
+      name: inputListValues[0],
+      about: inputListValues[1]
+    }
+
+    fetch('https://mesto.nomoreparties.co/v1/cohort-72/users/me', {
+      method: 'PATCH',
+      headers: {
+        authorization: '4de05b98-5a9e-448b-915c-192900b934bb',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( userData )
     })
+      .then(response => {
+
+        if (!response.ok) {
+          return Promise.reject(`Ошибка: ${response.status}`);
+        }
+
+      })
+
+    userInfo.setUserInfo( userData )
 
     popupEditProfile.close();
 
@@ -122,8 +144,8 @@ editProfileBtn.addEventListener('click', () => {
 
   const currentUserInfo = userInfo.getUserInfo();
 
-  inputName.value = currentUserInfo.userName;
-  inputJob.value = currentUserInfo.userJob;
+  inputName.value = currentUserInfo.name;
+  inputJob.value = currentUserInfo.about;
 });
 
 addCardBtn.addEventListener('click', () => {
