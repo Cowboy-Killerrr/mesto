@@ -1,9 +1,6 @@
 // ПОДКЛЮЧЕНИЕ СТИЛЕЙ К СТРАНИЦЕ
 import '../pages/index.css';
 
-// МАССИВ ИЗОБРАЖЕНИЙ
-import { galleryCards } from '../scripts/cards.js';
-
 // КЛАССЫ
 import Card from '../components/Card';
 import FormValidator from '../components/FormValidator';
@@ -32,21 +29,15 @@ const formSelectors = {
   inputErrorText: ".form__input-error",
 }
 
-let cardList;
-
 // ЭКЗЕМПЛЯРЫ КЛАССОВ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
+
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
 const userInfo = new UserInfo(() => { userInfo.getUserInfo() });
 userInfo.getUserInfo();
 
 const popupWithImage = new PopupWithImage('#popup-view-image');
-
-// МОДАЛЬНЫЕ ОКНА С ФОРМОЙ
-// function updateUserData() {
-//   return
-// }
 
 const popupEditProfile = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
@@ -90,6 +81,15 @@ const popupAddCard = new PopupWithForm({
       link: inputListValues[1],
     }
 
+    fetch('https://mesto.nomoreparties.co/v1/cohort-72/cards', {
+      method: 'POST',
+      headers: {
+        authorization: '4de05b98-5a9e-448b-915c-192900b934bb',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(cardData)
+    })
+
     cardList.addItem( createCardInstance(cardData) )
 
     popupAddCard.close();
@@ -98,6 +98,8 @@ const popupAddCard = new PopupWithForm({
 },'#popup-add-card');
 
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+let cardList;
+
 function fetchCardData() {
   return fetch('https://mesto.nomoreparties.co/v1/cohort-72/cards', {
     headers: {
