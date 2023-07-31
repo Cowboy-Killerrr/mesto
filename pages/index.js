@@ -120,10 +120,8 @@ fetchCardData()
       }
     }, '#gallery-list');
 
-    return cardList;
-  })
-  .then(cardList => {
     cardList.renderItems();
+    console.log(cardData);
   })
 
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
