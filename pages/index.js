@@ -1,8 +1,6 @@
 // ПОДКЛЮЧЕНИЕ СТИЛЕЙ К СТРАНИЦЕ
 import '../pages/index.css';
 
-const token = '4de05b98-5a9e-448b-915c-192900b934bb';
-
 // КЛАССЫ
 import Card from '../components/Card';
 import FormValidator from '../components/FormValidator';
@@ -10,6 +8,7 @@ import Section from '../components/Section';
 import PopupWithImage from '../components/PopupWithImage';
 import PopupWithForm from '../components/PopupWithForm';
 import UserInfo from '../components/UserInfo';
+import Api from '../components/Api';
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const editProfileBtn = document.querySelector('.profile__btn_type_edit');
@@ -31,16 +30,24 @@ const formSelectors = {
   inputErrorText: ".form__input-error",
 }
 
+// API
+const api = new Api({
+  url: 'https://mesto.nomoreparties.co/v1/cohort-72',
+  token: '4de05b98-5a9e-448b-915c-192900b934bb'
+})
+
 // ЭКЗЕМПЛЯРЫ КЛАССОВ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
 
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
-const userInfo = new UserInfo(() => { userInfo.getUserInfo() });
-userInfo.getUserInfo();
+// ИНФОРМАЦИЯ О ПОЛЬЗОВАТЕЛЕ
+const userInfo = new UserInfo();
+userInfo.setUserInfo();
 
 const popupWithImage = new PopupWithImage('#popup-view-image');
 
+// РЕДАКТИРОВАНИЕ ПРОФИЛЯ
 const popupEditProfile = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
 
@@ -51,48 +58,27 @@ const popupEditProfile = new PopupWithForm({
       about: inputListValues[1]
     }
 
-    fetch('https://mesto.nomoreparties.co/v1/cohort-72/users/me', {
-      method: 'PATCH',
-      headers: {
-        authorization: token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( userData )
-    })
-      .then(response => {
+    api.editUserInfo(userData);
 
-        if (!response.ok) {
-          return Promise.reject(`Ошибка: ${response.status}`);
-        }
-
-      })
-
-    userInfo.setUserInfo( userData )
+    userInfo.insertUserInfo( userData );
 
     popupEditProfile.close();
-
   }
 },'#popup-edit-profile');
 
+// ДОБАВЛЕНИЕ НОВОЙ КАРТОЧКИ
 const popupAddCard = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
     event.preventDefault();
 
-    const cardData = {
+    const cardObj = {
       name: inputListValues[0],
       link: inputListValues[1],
     }
 
-    fetch('https://mesto.nomoreparties.co/v1/cohort-72/cards', {
-      method: 'POST',
-      headers: {
-        authorization: token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(cardData)
-    })
+    api.addNewCard(cardObj)
 
-    cardList.addItem( createCardInstance(cardData) )
+    cardsList.addItem( createCardInstance(cardObj) )
 
     popupAddCard.close();
 
@@ -100,38 +86,43 @@ const popupAddCard = new PopupWithForm({
 },'#popup-add-card');
 
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-let cardList;
+const cardsList = new Section({
+  renderer: () => {
+    api.getInitialCards()
+      .then(cardsArray => {
+        cardsArray.forEach(cardObj => {
 
-function fetchCardData() {
-  return fetch('https://mesto.nomoreparties.co/v1/cohort-72/cards', {
-    headers: {
-      authorization: token
-    }
-  })
-  .then(response => { return response.json() })
-}
+          cardsList.addItem( createCardInstance(cardObj) )
 
-fetchCardData()
-  .then(cardData => {
-    cardList = new Section({
-      data: cardData,
-      renderer: (item) => {
+        })
+      })
+  }
+}, '#gallery-list')
 
-        cardList.addItem( createCardInstance(item) );
-
-      }
-    }, '#gallery-list');
-
-    cardList.renderItems();
-  })
+cardsList.renderItems();
 
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
-function createCardInstance(cardData) {
-  const newCard = new Card(cardData, { handleCardClick: () => {
+function createCardInstance(cardObj) {
+  const newCard = new Card(cardObj, {
 
-    popupWithImage.open(cardData);
+    handleCardClick: () => {
 
-  } }, '#card-template').createCard();
+      popupWithImage.open(cardObj);
+
+    },
+    setLikesNumber: (likesCounter) => {
+
+      if (cardObj.likes.length === 0) {
+        likesCounter.textContent = '';
+      } else {
+        likesCounter.textContent = cardObj.likes.length;
+      }
+
+    },
+    checkDeleteAccess: (buttonElement) => {
+      
+    }
+  }, '#card-template').createCard();
 
   return newCard;
 }
@@ -160,4 +151,4 @@ addCardBtn.addEventListener('click', () => {
 editProfileFormValidation.enableValidation();
 addCardFormValidation.enableValidation();
 
-export { token };
+export { api };

@@ -1,38 +1,13 @@
-import { token } from '../pages/index'
+import { api } from '../pages/index'
 
 export default class UserInfo {
-  constructor(userData) {
-    this.userData = userData;
+  constructor() {
     this._userNameSelector = document.querySelector('.profile__name');
     this._userJobSelector = document.querySelector('.profile__job');
     this._userAvatarSelector = document.querySelector('.profile__avatar');
   }
 
-  _fetchUserInfo() {
-    fetch('https://nomoreparties.co/v1/cohort-72/users/me', {
-      headers: {
-        authorization: token
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          return Promise.reject(`Ошибка: ${response.status}`);
-        }
-
-        return response.json()
-      })
-      .then(userData => {
-        this._userNameSelector.textContent = userData.name;
-        this._userJobSelector.textContent = userData.about;
-        this._userAvatarSelector.src = userData.avatar;
-      })
-      .catch(err => {
-        console.error(err);
-      })
-  }
-
   getUserInfo() {
-    this._fetchUserInfo();
 
     this.userData = {
       name: this._userNameSelector.textContent,
@@ -42,8 +17,29 @@ export default class UserInfo {
     return this.userData;
   }
 
-  setUserInfo(newUserData) {
-    this._userNameSelector.textContent = newUserData.name;
-    this._userJobSelector.textContent = newUserData.about;
+  getUserId() {
+    api.getUserDataObj()
+      .then(userInfoObj => {
+
+        return userInfoObj._id;
+
+      });
+  }
+
+  setUserInfo() {
+    api.getUserDataObj()
+      .then(userInfoObj => {
+
+        this._userNameSelector.textContent = userInfoObj.name;
+        this._userJobSelector.textContent = userInfoObj.about;
+        this._userAvatarSelector.src = userInfoObj.avatar;
+
+      });
+  }
+
+  insertUserInfo(userInfoObj) {
+    this._userNameSelector.textContent = userInfoObj.name;
+    this._userJobSelector.textContent = userInfoObj.about;
   }
 }
+
