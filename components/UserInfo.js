@@ -1,3 +1,5 @@
+import { token } from '../pages/index'
+
 export default class UserInfo {
   constructor(userData) {
     this.userData = userData;
@@ -9,7 +11,7 @@ export default class UserInfo {
   _fetchUserInfo() {
     fetch('https://nomoreparties.co/v1/cohort-72/users/me', {
       headers: {
-        authorization: '4de05b98-5a9e-448b-915c-192900b934bb'
+        authorization: token
       }
     })
       .then(response => {

@@ -146,6 +146,23 @@
       </figure>
     </div>
 
+    <!-- popup-delete-card -->
+    <div id="popup-delete-card" class="popup">
+      <div class="popup__container">
+        <button type="button" class="popup__btn popup__btn_type_close"></button>
+        <h2 class="popup__title">Вы уверены?</h2>
+        <form
+          novalidate
+          action="#"
+          name="delete-card-form"
+          id="delete-card-form"
+          class="form form_type_delete-card"
+        >
+          <button type="submit" class="form__btn">Да</button>
+        </form>
+      </div>
+    </div>
+
     <template id="card-template">
       <li class="card">
         <img class="card__image" />

@@ -1,3 +1,7 @@
+import PopupWithSubmit from "./PopupWithSubmit";
+
+
+
 export default class Card {
   constructor(data, { handleCardClick }, templateSelector) {
     this._cardName = data.name;
@@ -5,6 +9,17 @@ export default class Card {
     this._cardLikes = data.likes;
     this._handleCardClick = handleCardClick;
     this._templateSelector = templateSelector;
+
+    this.popupDeleteCard = new PopupWithSubmit({
+
+      formSubmitCallback: (event) => {
+        event.preventDefault();
+
+        this._element.remove();
+        this.popupDeleteCard.close()
+      }
+
+    }, '#popup-delete-card')
   }
 
   _getTemplate() {
@@ -14,7 +29,7 @@ export default class Card {
   }
 
   _handleCardDelete() {
-    this._element.remove();
+    this.popupDeleteCard.open();
   }
 
   _handleCardLike() {

@@ -1,6 +1,8 @@
 // ПОДКЛЮЧЕНИЕ СТИЛЕЙ К СТРАНИЦЕ
 import '../pages/index.css';
 
+const token = '4de05b98-5a9e-448b-915c-192900b934bb';
+
 // КЛАССЫ
 import Card from '../components/Card';
 import FormValidator from '../components/FormValidator';
@@ -52,7 +54,7 @@ const popupEditProfile = new PopupWithForm({
     fetch('https://mesto.nomoreparties.co/v1/cohort-72/users/me', {
       method: 'PATCH',
       headers: {
-        authorization: '4de05b98-5a9e-448b-915c-192900b934bb',
+        authorization: token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify( userData )
@@ -84,7 +86,7 @@ const popupAddCard = new PopupWithForm({
     fetch('https://mesto.nomoreparties.co/v1/cohort-72/cards', {
       method: 'POST',
       headers: {
-        authorization: '4de05b98-5a9e-448b-915c-192900b934bb',
+        authorization: token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(cardData)
@@ -103,7 +105,7 @@ let cardList;
 function fetchCardData() {
   return fetch('https://mesto.nomoreparties.co/v1/cohort-72/cards', {
     headers: {
-      authorization: '4de05b98-5a9e-448b-915c-192900b934bb'
+      authorization: token
     }
   })
   .then(response => { return response.json() })
@@ -121,7 +123,6 @@ fetchCardData()
     }, '#gallery-list');
 
     cardList.renderItems();
-    console.log(cardData);
   })
 
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
@@ -159,5 +160,4 @@ addCardBtn.addEventListener('click', () => {
 editProfileFormValidation.enableValidation();
 addCardFormValidation.enableValidation();
 
-
-
+export { token };
