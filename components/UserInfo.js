@@ -17,15 +17,6 @@ export default class UserInfo {
     return this.userData;
   }
 
-  getUserId() {
-    api.getUserDataObj()
-      .then(userInfoObj => {
-
-        return userInfoObj._id;
-
-      });
-  }
-
   setUserInfo() {
     api.getUserDataObj()
       .then(userInfoObj => {

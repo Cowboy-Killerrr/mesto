@@ -85,6 +85,12 @@ const popupAddCard = new PopupWithForm({
   }
 },'#popup-add-card');
 
+// ID ПОЛЬЗОВАТЕЛЯ
+const userId = await api.getUserDataObj()
+.then(userDataObj => {
+  return userDataObj._id;
+})
+
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 const cardsList = new Section({
   renderer: () => {
@@ -92,7 +98,7 @@ const cardsList = new Section({
       .then(cardsArray => {
         cardsArray.forEach(cardObj => {
 
-          cardsList.addItem( createCardInstance(cardObj) )
+          cardsList.addItem( createCardInstance(cardObj, userId) )
 
         })
       })
@@ -102,7 +108,7 @@ const cardsList = new Section({
 cardsList.renderItems();
 
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
-function createCardInstance(cardObj) {
+function createCardInstance(cardObj, userIdValue) {
   const newCard = new Card(cardObj, {
 
     handleCardClick: () => {
@@ -110,17 +116,10 @@ function createCardInstance(cardObj) {
       popupWithImage.open(cardObj);
 
     },
-    setLikesNumber: (likesCounter) => {
-
-      if (cardObj.likes.length === 0) {
-        likesCounter.textContent = '';
-      } else {
-        likesCounter.textContent = cardObj.likes.length;
-      }
-
-    },
     checkDeleteAccess: (buttonElement) => {
-      
+      if (userIdValue != cardObj.owner._id) {
+        buttonElement.remove();
+      }
     }
   }, '#card-template').createCard();
 

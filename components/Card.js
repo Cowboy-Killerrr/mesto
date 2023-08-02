@@ -2,11 +2,9 @@ import PopupWithSubmit from "./PopupWithSubmit";
 import { api } from "../pages/index";
 
 export default class Card {
-  constructor(data, { handleCardClick, setLikesNumber, checkDeleteAccess }, templateSelector) {
-    this._cardName = data.name;
-    this._cardLink = data.link;
+  constructor(data, { handleCardClick, checkDeleteAccess }, templateSelector) {
+    this._data = data;
     this._handleCardClick = handleCardClick;
-    this._setLikesNumber = setLikesNumber;
     this._checkDeleteAccess = checkDeleteAccess;
     this._templateSelector = templateSelector;
 
@@ -14,6 +12,8 @@ export default class Card {
 
       formSubmitCallback: (event) => {
         event.preventDefault();
+
+        api.deleteCard(data._id);
 
         this._element.remove();
         this.popupDeleteCard.close()
@@ -50,18 +50,26 @@ export default class Card {
     })
   }
 
+  _setLikesNumber(likesCounter, data) {
+    if (data.likes.length === 0) {
+      likesCounter.textContent = '';
+    } else {
+      likesCounter.textContent = data.likes.length;
+    }
+  }
+
   createCard() {
     this._element = this._getTemplate();
     this._setEventListeners();
 
     this._elementImage = this._element.querySelector('.card__image');
-    this._elementImage.src = this._cardLink;
-    this._elementImage.alt = this._cardName;
+    this._elementImage.src = this._data.link;
+    this._elementImage.alt = this._data.name;
 
     this._elementName = this._element.querySelector('.card__title');
-    this._elementName.textContent = this._cardName;
+    this._elementName.textContent = this._data.name;
 
-    this._setLikesNumber(this._element.querySelector('.card__likes'));
+    this._setLikesNumber(this._element.querySelector('.card__likes'), this._data);
     this._checkDeleteAccess(this._element.querySelector('.card__delete-btn'));
 
     return this._element;
