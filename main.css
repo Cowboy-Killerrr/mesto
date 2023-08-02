@@ -4,15 +4,19 @@
 .card{background-color:var(--text);border-radius:10px;color:var(--background);overflow:hidden;position:relative}
 .card__delete-btn{background:none;background-image:url(246d9904e4bc8394be91.svg);background-position:50%;background-repeat:no-repeat;background-size:cover;border:none;cursor:pointer;height:19px;padding:0;position:absolute;right:20px;top:20px;transition:opacity .5s;width:18px}.card__delete-btn:hover{opacity:.5}
 .card__image{cursor:pointer;height:282px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center;width:100%}
-.card__heading-container{align-items:center;display:flex;justify-content:space-between;padding:21px 20px 25px 21px}
+.card__heading-container{align-items:flex-start;display:flex;justify-content:space-between;padding:21px 20px 25px 21px}
 .card__title{font-size:24px;font-weight:900;line-height:1.2;margin:0;max-width:215px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card__like-container{align-items:center;display:flex;flex-direction:column;gap:3px}
 .card__like-btn{background:none;background-image:url(f9cbbc232f4ed178be38.svg);background-position:50%;background-repeat:no-repeat;border:none;cursor:pointer;min-height:19px;min-width:22px;padding:0;transition:opacity .5s}.card__like-btn:hover{opacity:.5}
+.card__likes{color:var(--background);font-size:13px;font-style:normal;font-weight:400;line-height:1;max-width:40px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card__like-btn_active{background-image:url(35948469632d0421d697.svg)}
 .page{-moz-text-size-adjust:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;background-color:var(--background);color:var(--text);font-family:Inter,Arial,sans-serif;font-style:normal;margin:0 auto;max-width:880px;padding:0 40px;position:relative}@media screen and (max-width:425px){.page{padding:0}}
 .header{border-bottom:1px solid rgba(84,84,84,.7);padding:45px 0 40px}@media screen and (max-width:768px){.header{padding:45px 0 40px}}@media screen and (max-width:425px){.header{padding:28px 27px 27px}}
 .header__logo{max-width:142px}@media screen and (max-width:425px){.header__logo{max-width:104px}}
 .profile{align-items:center;display:grid;gap:30px;grid-template-columns:120px 1fr 150px;padding:37px 0 51px}@media screen and (max-width:768px){.profile{grid-template-columns:120px 1fr 50px}}@media screen and (max-width:650px){.profile{grid-template-columns:1fr;justify-items:center}}@media screen and (max-width:425px){.profile{gap:0;padding:42px 19px 36px}}
+.profile__avatar-container{position:relative}
 .profile__avatar{border-radius:100%;height:120px;margin:0 auto;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center;width:120px}
+.profile__avatar-btn{background:rgba(0,0,0,.8);background-image:url(a086f758840ae814ecde.svg);background-position:50%;background-repeat:no-repeat;border:none;bottom:0;cursor:pointer;left:0;opacity:0;position:absolute;right:0;top:0;transition:opacity .5s}.profile__avatar-btn:hover{opacity:1}
 .profile__info{display:grid;gap:11px;grid-template-columns:1fr}@media screen and (max-width:425px){.profile__info{gap:9px;padding:28px 0 32px}}
 .profile__name-container{align-items:flex-end;display:flex;gap:18px;min-width:0}@media screen and (max-width:650px){.profile__name-container{justify-content:center}}@media screen and (max-width:425px){.profile__name-container{gap:0;position:relative}}
 .profile__name{font-size:42px;font-style:normal;font-weight:500;line-height:1.14;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media screen and (max-width:425px){.profile__name{font-size:27px;max-width:220px}}
