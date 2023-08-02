@@ -70,4 +70,34 @@ export default class Api {
       return response.json();
     });
   }
+
+  likeCard(id) {
+    return fetch(`${this.url}/cards/${id}/likes`, {
+      method: 'PUT',
+      headers: {
+        authorization: this.token
+      }
+    }).then(response => {
+      if (!response.ok) {
+        return Promise.reject(`Ошибка: ${response.status}`);
+      }
+
+      return response.json();
+    });
+  }
+
+  unlikeCard(id) {
+    return fetch(`${this.url}/cards/${id}/likes`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this.token
+      }
+    }).then(response => {
+      if (!response.ok) {
+        return Promise.reject(`Ошибка: ${response.status}`);
+      }
+
+      return response.json();
+    });
+  }
 }

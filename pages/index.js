@@ -110,7 +110,6 @@ cardsList.renderItems();
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
 function createCardInstance(cardObj, userIdValue) {
   const newCard = new Card(cardObj, {
-
     handleCardClick: () => {
 
       popupWithImage.open(cardObj);
@@ -120,6 +119,13 @@ function createCardInstance(cardObj, userIdValue) {
       if (userIdValue != cardObj.owner._id) {
         buttonElement.remove();
       }
+    },
+    setLikeButtonState: (buttonElementClassList) => {
+      cardObj.likes.forEach(user => {
+        if (user._id === userIdValue) {
+          buttonElementClassList.add('card__like-btn_active')
+        }
+      })
     }
   }, '#card-template').createCard();
 

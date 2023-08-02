@@ -2,10 +2,13 @@ import PopupWithSubmit from "./PopupWithSubmit";
 import { api } from "../pages/index";
 
 export default class Card {
-  constructor(data, { handleCardClick, checkDeleteAccess }, templateSelector) {
+  constructor(data, { handleCardClick, checkDeleteAccess, setLikeButtonState }, templateSelector) {
     this._data = data;
+
     this._handleCardClick = handleCardClick;
     this._checkDeleteAccess = checkDeleteAccess;
+    this._setLikeButtonState = setLikeButtonState;
+
     this._templateSelector = templateSelector;
 
     this.popupDeleteCard = new PopupWithSubmit({
@@ -32,8 +35,30 @@ export default class Card {
     this.popupDeleteCard.open();
   }
 
+  _isLikeButtonActive(buttonElementClassList) {
+    return buttonElementClassList.contains('card__like-btn_active') ? true : false
+  }
+
   _handleCardLike() {
-    this._element.querySelector('.card__like-btn').classList.toggle('card__like-btn_active');
+    this._likeButtonClassList = this._element.querySelector('.card__like-btn').classList;
+
+    if ( this._isLikeButtonActive(this._likeButtonClassList) ) {
+
+      this._likeButtonClassList.remove('card__like-btn_active');
+      api.unlikeCard(this._data._id)
+        .then(response => {
+          this._setLikesNumber(this._element.querySelector('.card__likes'), response);
+        })
+
+    } else {
+
+      this._likeButtonClassList.add('card__like-btn_active');
+      api.likeCard(this._data._id)
+        .then(response => {
+          this._setLikesNumber(this._element.querySelector('.card__likes'), response);
+        })
+
+    }
   }
 
   _setEventListeners() {
@@ -71,6 +96,7 @@ export default class Card {
 
     this._setLikesNumber(this._element.querySelector('.card__likes'), this._data);
     this._checkDeleteAccess(this._element.querySelector('.card__delete-btn'));
+    this._setLikeButtonState(this._element.querySelector('.card__like-btn').classList);
 
     return this._element;
   }
