@@ -19,7 +19,6 @@ const inputJob = editProfileForm.querySelector('#job');
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ АВАТВРКИ
 const editAvatarBtn = document.querySelector('.profile__avatar-btn');
 const editAvatarForm = document.querySelector('#edit-avatar-form');
-const inputAvatarLink = editProfileForm.querySelector('#avatar-link');
 
 // ДЛЯ ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
 const addCardBtn = document.querySelector('.profile__btn_type_add');
@@ -41,20 +40,22 @@ const api = new Api({
   token: '4de05b98-5a9e-448b-915c-192900b934bb'
 })
 
-// ЭКЗЕМПЛЯРЫ КЛАССОВ
+// ID ПОЛЬЗОВАТЕЛЯ
+const userId = await api.getUserDataObj()
+.then(userDataObj => {
+  return userDataObj._id;
+})
+
+// ЭКХЕМПЛЯРЫ КЛАССА ВАЛИДАЦИИ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
-
 const editAvatarFormValidation = new FormValidator(formSelectors, editAvatarForm);
-
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
-// ИНФОРМАЦИЯ О ПОЛЬЗОВАТЕЛЕ
+// ПОЛУЧИТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЕ
 const userInfo = new UserInfo();
 userInfo.setUserInfo();
 
-const popupWithImage = new PopupWithImage('#popup-view-image');
-
-// РЕДАКТИРОВАНИЕ ПРОФИЛЯ
+// ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const popupEditProfile = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
 
@@ -69,22 +70,25 @@ const popupEditProfile = new PopupWithForm({
 
     userInfo.insertUserInfo( userData );
 
-    popupEditProfile.close();
+    popupEditProfile.close()
   }
 },'#popup-edit-profile');
 
-// РЕДАКТИРОВАНИЕ АВАТАРКИ
+// ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
 const popupEditAvatar = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
     event.preventDefault();
 
-    api.editUserAvatar({ avatar: inputListValues[0] });
+    api.editUserAvatar({ avatar: inputListValues[0] })
+      .then(() => {
+        document.querySelector('.profile__avatar').src = inputListValues[0];
+      })
 
-    popupEditAvatar.close();
+    popupEditAvatar.close()
   }
 },'#popup-edit-avatar');
 
-// ДОБАВЛЕНИЕ НОВОЙ КАРТОЧКИ
+// ПОПАП НОВОЙ КАРТОЧКИ
 const popupAddCard = new PopupWithForm({
   formSubmitCallback: (event, inputListValues) => {
     event.preventDefault();
@@ -98,16 +102,13 @@ const popupAddCard = new PopupWithForm({
 
     cardsList.addItem( createCardInstance(cardObj) )
 
-    popupAddCard.close();
+    popupAddCard.close()
 
   }
 },'#popup-add-card');
 
-// ID ПОЛЬЗОВАТЕЛЯ
-const userId = await api.getUserDataObj()
-.then(userDataObj => {
-  return userDataObj._id;
-})
+// ПОПАП ПРОСМОТРА КАРТИНКИ
+const popupWithImage = new PopupWithImage('#popup-view-image');
 
 // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 const cardsList = new Section({
@@ -150,7 +151,7 @@ function createCardInstance(cardObj, userIdValue) {
   return newCard;
 }
 
-// ОТКРЫТИЕ МОДАЛЬНЫХ ОКОН
+// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 editProfileBtn.addEventListener('click', () => {
   popupEditProfile.open();
 
@@ -163,12 +164,14 @@ editProfileBtn.addEventListener('click', () => {
   inputJob.value = currentUserInfo.about;
 });
 
+// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
 editAvatarBtn.addEventListener('click', () => {
   popupEditAvatar.open()
 
   editProfileFormValidation.hideValidationErrors();
 })
 
+// ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
 addCardBtn.addEventListener('click', () => {
   popupAddCard.open();
 

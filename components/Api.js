@@ -17,6 +17,9 @@ export default class Api {
 
         return response.json();
       })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   getInitialCards() {
@@ -32,10 +35,13 @@ export default class Api {
 
         return response.json();
       })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   editUserInfo(userDataObj) {
-    fetch(`${this.url}/users/me`, {
+    return fetch(`${this.url}/users/me`, {
       method: 'PATCH',
       headers: {
         authorization: this.token,
@@ -43,10 +49,13 @@ export default class Api {
       },
       body: JSON.stringify(userDataObj)
     })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   editUserAvatar(userAvatarObj) {
-    fetch(`${this.url}/users/me/avatar`, {
+    return fetch(`${this.url}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
         authorization: this.token,
@@ -54,6 +63,9 @@ export default class Api {
       },
       body: JSON.stringify(userAvatarObj)
     })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   addNewCard(cardDataObj) {
@@ -65,6 +77,9 @@ export default class Api {
       },
       body: JSON.stringify(cardDataObj)
     })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   deleteCard(id) {
@@ -73,13 +88,17 @@ export default class Api {
       headers: {
         authorization: this.token
       }
-    }).then(response => {
-      if (!response.ok) {
-        return Promise.reject(`Ошибка: ${response.status}`);
-      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(`Ошибка: ${response.status}`);
+        }
 
-      return response.json();
-    });
+        return response.json();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   likeCard(id) {
@@ -88,13 +107,17 @@ export default class Api {
       headers: {
         authorization: this.token
       }
-    }).then(response => {
-      if (!response.ok) {
-        return Promise.reject(`Ошибка: ${response.status}`);
-      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(`Ошибка: ${response.status}`);
+        }
 
-      return response.json();
-    });
+        return response.json();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   unlikeCard(id) {
@@ -103,12 +126,16 @@ export default class Api {
       headers: {
         authorization: this.token
       }
-    }).then(response => {
-      if (!response.ok) {
-        return Promise.reject(`Ошибка: ${response.status}`);
-      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(`Ошибка: ${response.status}`);
+        }
 
-      return response.json();
-    });
+        return response.json();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
