@@ -45,6 +45,17 @@ export default class Api {
     })
   }
 
+  editUserAvatar(userAvatarObj) {
+    fetch(`${this.url}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: {
+        authorization: this.token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userAvatarObj)
+    })
+  }
+
   addNewCard(cardDataObj) {
     return fetch(`${this.url}/cards`, {
       method: 'POST',

@@ -16,6 +16,11 @@ const editProfileForm = document.querySelector('#edit-profile-form');
 const inputName = editProfileForm.querySelector('#name');
 const inputJob = editProfileForm.querySelector('#job');
 
+// ДЛЯ ОКНА РЕДАКТИРОВАНИЯ АВАТВРКИ
+const editAvatarBtn = document.querySelector('.profile__avatar-btn');
+const editAvatarForm = document.querySelector('#edit-avatar-form');
+const inputAvatarLink = editProfileForm.querySelector('#avatar-link');
+
 // ДЛЯ ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
 const addCardBtn = document.querySelector('.profile__btn_type_add');
 const addCardForm = document.querySelector('#add-card-form');
@@ -38,6 +43,8 @@ const api = new Api({
 
 // ЭКЗЕМПЛЯРЫ КЛАССОВ
 const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
+
+const editAvatarFormValidation = new FormValidator(formSelectors, editAvatarForm);
 
 const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
 
@@ -65,6 +72,17 @@ const popupEditProfile = new PopupWithForm({
     popupEditProfile.close();
   }
 },'#popup-edit-profile');
+
+// РЕДАКТИРОВАНИЕ АВАТАРКИ
+const popupEditAvatar = new PopupWithForm({
+  formSubmitCallback: (event, inputListValues) => {
+    event.preventDefault();
+
+    api.editUserAvatar({ avatar: inputListValues[0] });
+
+    popupEditAvatar.close();
+  }
+},'#popup-edit-avatar');
 
 // ДОБАВЛЕНИЕ НОВОЙ КАРТОЧКИ
 const popupAddCard = new PopupWithForm({
@@ -145,6 +163,12 @@ editProfileBtn.addEventListener('click', () => {
   inputJob.value = currentUserInfo.about;
 });
 
+editAvatarBtn.addEventListener('click', () => {
+  popupEditAvatar.open()
+
+  editProfileFormValidation.hideValidationErrors();
+})
+
 addCardBtn.addEventListener('click', () => {
   popupAddCard.open();
 
@@ -154,6 +178,7 @@ addCardBtn.addEventListener('click', () => {
 
 // ВАЛИДАЦИЯ ФОРМ
 editProfileFormValidation.enableValidation();
+editAvatarFormValidation.enableValidation();
 addCardFormValidation.enableValidation();
 
 export { api };
