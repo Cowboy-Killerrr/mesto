@@ -4,7 +4,7 @@ export default class Api {
     this.token = token;
   }
 
-  async getUserDataObj() {
+  getUserDataObj() {
     return fetch(`${this.url}/users/me`, {
       headers: {
         authorization: this.token
