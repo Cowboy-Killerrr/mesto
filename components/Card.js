@@ -2,12 +2,12 @@ import PopupWithSubmit from "./PopupWithSubmit";
 import { api } from "../pages/index";
 
 export default class Card {
-  constructor(data, { handleCardClick, checkDeleteAccess, setLikeButtonState }, templateSelector) {
-    this._data = data;
+  constructor(cardData, userData, { handleCardClick, checkDeleteAccess }, templateSelector) {
+    this._cardData = cardData;
+    this._userData = userData;
 
     this._handleCardClick = handleCardClick;
     this._checkDeleteAccess = checkDeleteAccess;
-    this._setLikeButtonState = setLikeButtonState;
 
     this._templateSelector = templateSelector;
 
@@ -45,7 +45,7 @@ export default class Card {
     if ( this._isLikeButtonActive(this._likeButtonClassList) ) {
 
       this._likeButtonClassList.remove('card__like-btn_active');
-      api.unlikeCard(this._data._id)
+      api.unlikeCard(this._cardData._id)
         .then(response => {
           this._setLikesNumber(this._element.querySelector('.card__likes'), response);
         })
@@ -53,7 +53,7 @@ export default class Card {
     } else {
 
       this._likeButtonClassList.add('card__like-btn_active');
-      api.likeCard(this._data._id)
+      api.likeCard(this._cardData._id)
         .then(response => {
           this._setLikesNumber(this._element.querySelector('.card__likes'), response);
         })
@@ -83,20 +83,28 @@ export default class Card {
     }
   }
 
+  _setLikeButtonState(cardData, currentUserId) {
+    cardData.likes.forEach(user => {
+      if (user._id === currentUserId) {
+        this._element.querySelector('.card__like-btn').classList.add('card__like-btn_active')
+      }
+    })
+  }
+
   createCard() {
     this._element = this._getTemplate();
     this._setEventListeners();
 
     this._elementImage = this._element.querySelector('.card__image');
-    this._elementImage.src = this._data.link;
-    this._elementImage.alt = this._data.name;
+    this._elementImage.src = this._cardData.link;
+    this._elementImage.alt = this._cardData.name;
 
     this._elementName = this._element.querySelector('.card__title');
-    this._elementName.textContent = this._data.name;
+    this._elementName.textContent = this._cardData.name;
 
-    this._setLikesNumber(this._element.querySelector('.card__likes'), this._data);
+    this._setLikesNumber(this._element.querySelector('.card__likes'), this._cardData);
     this._checkDeleteAccess(this._element.querySelector('.card__delete-btn'));
-    this._setLikeButtonState(this._element.querySelector('.card__like-btn').classList);
+    this._setLikeButtonState(this._cardData, this._userData);
 
     return this._element;
   }

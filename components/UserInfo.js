@@ -18,7 +18,7 @@ export default class UserInfo {
   }
 
   setUserInfo() {
-    api.getUserDataObj()
+    api.getUserData()
       .then(userInfoObj => {
 
         this._userNameSelector.textContent = userInfoObj.name;
@@ -31,6 +31,10 @@ export default class UserInfo {
   insertUserInfo(userInfoObj) {
     this._userNameSelector.textContent = userInfoObj.name;
     this._userJobSelector.textContent = userInfoObj.about;
+  }
+
+  changeUserAvatar(link) {
+    this._userAvatarSelector.src = link;
   }
 }
 

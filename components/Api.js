@@ -12,7 +12,7 @@ export default class Api {
     return response.json();
   }
 
-  getUserDataObj() {
+  getUserData() {
     return fetch(`${this.url}/users/me`, {
       headers: {
         authorization: this.token
