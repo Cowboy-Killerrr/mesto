@@ -11,18 +11,18 @@ import UserInfo from '../components/UserInfo';
 import Api from '../components/Api';
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-const editProfileBtn = document.querySelector('.profile__btn_type_edit');
-const editProfileForm = document.querySelector('#edit-profile-form');
-const inputName = editProfileForm.querySelector('#name');
-const inputJob = editProfileForm.querySelector('#job');
+const buttonEditProfile = document.querySelector('.profile__btn_type_edit');
+const formEditProfile = document.querySelector('#edit-profile-form');
+const inputName = formEditProfile.querySelector('#name');
+const inputJob = formEditProfile.querySelector('#job');
 
 // ДЛЯ ОКНА РЕДАКТИРОВАНИЯ АВАТВРКИ
-const editAvatarBtn = document.querySelector('.profile__avatar-btn');
-const editAvatarForm = document.querySelector('#edit-avatar-form');
+const buttonEditAvatar = document.querySelector('.profile__avatar-btn');
+const formEditAvatar = document.querySelector('#edit-avatar-form');
 
 // ДЛЯ ОКНА ДОБАВЛЕНИЯ КАРТОЧКИ
-const addCardBtn = document.querySelector('.profile__btn_type_add');
-const addCardForm = document.querySelector('#add-card-form');
+const buttonAddCard = document.querySelector('.profile__btn_type_add');
+const formAddCard = document.querySelector('#add-card-form');
 
 // СЕЛЕКТОРЫ ДЛЯ ВАЛИДАЦИИ
 const formSelectors = {
@@ -47,9 +47,9 @@ const userId = await api.getUserDataObj()
 })
 
 // ЭКХЕМПЛЯРЫ КЛАССА ВАЛИДАЦИИ
-const editProfileFormValidation = new FormValidator(formSelectors, editProfileForm);
-const editAvatarFormValidation = new FormValidator(formSelectors, editAvatarForm);
-const addCardFormValidation = new FormValidator(formSelectors, addCardForm);
+const formEditProfileValidation = new FormValidator(formSelectors, formEditProfile);
+const formEditAvatarValidation = new FormValidator(formSelectors, formEditAvatar);
+const formAddCardValidation = new FormValidator(formSelectors, formAddCard);
 
 // ПОЛУЧИТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЕ
 const userInfo = new UserInfo();
@@ -152,11 +152,11 @@ function createCardInstance(cardObj, userIdValue) {
 }
 
 // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-editProfileBtn.addEventListener('click', () => {
+buttonEditProfile.addEventListener('click', () => {
   popupEditProfile.open();
 
-  editProfileFormValidation.hideValidationErrors();
-  editProfileFormValidation.enableButton();
+  formEditProfileValidation.hideValidationErrors();
+  formEditProfileValidation.enableButton();
 
   const currentUserInfo = userInfo.getUserInfo();
 
@@ -165,23 +165,23 @@ editProfileBtn.addEventListener('click', () => {
 });
 
 // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
-editAvatarBtn.addEventListener('click', () => {
+buttonEditAvatar.addEventListener('click', () => {
   popupEditAvatar.open()
 
-  editProfileFormValidation.hideValidationErrors();
+  formEditProfileValidation.hideValidationErrors();
 })
 
 // ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
-addCardBtn.addEventListener('click', () => {
+buttonAddCard.addEventListener('click', () => {
   popupAddCard.open();
 
-  addCardFormValidation.hideValidationErrors();
-  addCardFormValidation.disableButton();
+  formAddCardValidation.hideValidationErrors();
+  formAddCardValidation.disableButton();
 });
 
 // ВАЛИДАЦИЯ ФОРМ
-editProfileFormValidation.enableValidation();
-editAvatarFormValidation.enableValidation();
-addCardFormValidation.enableValidation();
+formEditProfileValidation.enableValidation();
+formEditAvatarValidation.enableValidation();
+formAddCardValidation.enableValidation();
 
 export { api };
