@@ -7,6 +7,7 @@ import FormValidator from '../components/FormValidator';
 import Section from '../components/Section';
 import PopupWithImage from '../components/PopupWithImage';
 import PopupWithForm from '../components/PopupWithForm';
+import PopupWithSubmit from '../components/PopupWithSubmit';
 import UserInfo from '../components/UserInfo';
 import Api from '../components/Api';
 
@@ -55,7 +56,8 @@ Promise.all([
     renderer: () => {
       cardsArray.forEach(cardObj => {
 
-        cardsList.addItem( createCardInstance(cardObj, userData._id) )
+        const cardElement = createCardInstance(cardObj, userData);
+        cardsList.addItem( cardElement );
 
       })
     }
@@ -63,6 +65,29 @@ Promise.all([
 
   cardsList.renderItems();
 
+  // ПОПАП НОВОЙ КАРТОЧКИ
+  const popupAddCard = new PopupWithForm({
+    formSubmitCallback: (inputListValues) => {
+
+      api.addNewCard(inputListValues)
+        .then(() => {
+
+          cardsList.addItem( createCardInstance(inputListValues, userData) )
+          popupAddCard.close()
+
+        })
+        .catch(err => { console.log(err); })
+    }
+  },'#popup-add-card');
+
+  // ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
+  buttonAddCard.addEventListener('click', () => {
+    popupAddCard.open();
+    popupAddCard.changeSubmitButtonText('Создать');
+
+    formAddCardValidation.hideValidationErrors();
+    formAddCardValidation.disableButton();
+  });
 })
 
 // ЭКХЕМПЛЯРЫ КЛАССА ВАЛИДАЦИИ
@@ -102,21 +127,6 @@ const popupEditAvatar = new PopupWithForm({
   }
 },'#popup-edit-avatar');
 
-// ПОПАП НОВОЙ КАРТОЧКИ
-const popupAddCard = new PopupWithForm({
-  formSubmitCallback: (inputListValues) => {
-
-    api.addNewCard(inputListValues)
-      .then(() => {
-
-        cardsList.addItem( createCardInstance(inputListValues) )
-        popupAddCard.close()
-
-      })
-      .catch(err => { console.log(err); })
-  }
-},'#popup-add-card');
-
 // ПОПАП ПРОСМОТРА КАРТИНКИ
 const popupWithImage = new PopupWithImage('#popup-view-image');
 
@@ -128,14 +138,50 @@ function createCardInstance(cardData, userData) {
       popupWithImage.open(cardData);
 
     },
+    handleCardLike: (buttonLike, cardData) => {
+      if (buttonLike.classList.contains('card__like-btn_active')) {
+        api.unlikeCard(cardData._id)
+          .then(cardDataResponse => {
+            newCard.querySelector('.card__likes').textContent = cardDataResponse.likes.length;
+          })
+          .then(() => {
+            buttonLike.classList.remove('card__like-btn_active');
+          })
+      } else {
+        api.likeCard(cardData._id)
+          .then(cardDataResponse => {
+            newCard.querySelector('.card__likes').textContent = cardDataResponse.likes.length;
+          })
+          .then(() => {
+            buttonLike.classList.add('card__like-btn_active');
+          })
+      }
+    },
+    handleCardDelete: (cardData) => {
+      // ПОПАП УДАЛЕНИЯ КАРТОЧКИ
+      const popupDeleteCard = new PopupWithSubmit({
+
+        formSubmitCallback: (event) => {
+          event.preventDefault();
+
+          api.deleteCard(cardData._id);
+
+          newCard.remove();
+          popupDeleteCard.close()
+        }
+
+      }, '#popup-delete-card')
+
+      popupDeleteCard.open();
+    },
     checkDeleteAccess: (buttonElement) => {
       if (userData._id != cardData.owner._id) {
         buttonElement.remove();
       }
     }
-  }, '#card-template').createCard();
+  }, '#card-template');
 
-  return newCard;
+  return newCard.createCard();
 }
 
 // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
@@ -159,14 +205,7 @@ buttonEditAvatar.addEventListener('click', () => {
   formEditAvatarValidation.disableButton();
 })
 
-// ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
-buttonAddCard.addEventListener('click', () => {
-  popupAddCard.open();
-  popupAddCard.changeSubmitButtonText('Создать');
 
-  formAddCardValidation.hideValidationErrors();
-  formAddCardValidation.disableButton();
-});
 
 // ВАЛИДАЦИЯ ФОРМ
 formEditProfileValidation.enableValidation();
