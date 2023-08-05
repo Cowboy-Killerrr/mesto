@@ -76,34 +76,25 @@ userInfo.setUserInfo();
 
 // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const popupEditProfile = new PopupWithForm({
-  formSubmitCallback: (event, inputListValues) => {
+  formSubmitCallback: (inputListValues) => {
 
-    event.preventDefault();
-
-    const userData = {
-      name: inputListValues[0],
-      about: inputListValues[1]
-    }
-
-    api.editUserInfo(userData)
+    api.editUserInfo( inputListValues )
       .then(() => {
-        userInfo.insertUserInfo( userData );
+        userInfo.insertUserInfo( inputListValues );
         popupEditProfile.close()
       })
       .catch(err => { console.log(err); })
-
 
   }
 },'#popup-edit-profile');
 
 // ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
 const popupEditAvatar = new PopupWithForm({
-  formSubmitCallback: (event, inputListValues) => {
-    event.preventDefault();
+  formSubmitCallback: (inputListValues) => {
 
-    api.editUserAvatar({ avatar: inputListValues[0] })
+    api.editUserAvatar(inputListValues)
       .then(() => {
-        userInfo.changeUserAvatar(inputListValues[0]);
+        userInfo.changeUserAvatar(inputListValues.avatar);
       })
       .catch(err => { console.log(err); })
 
@@ -113,18 +104,12 @@ const popupEditAvatar = new PopupWithForm({
 
 // ПОПАП НОВОЙ КАРТОЧКИ
 const popupAddCard = new PopupWithForm({
-  formSubmitCallback: (event, inputListValues) => {
-    event.preventDefault();
+  formSubmitCallback: (inputListValues) => {
 
-    const cardObj = {
-      name: inputListValues[0],
-      link: inputListValues[1],
-    }
-
-    api.addNewCard(cardObj)
+    api.addNewCard(inputListValues)
       .then(() => {
 
-        cardsList.addItem( createCardInstance(cardObj) )
+        cardsList.addItem( createCardInstance(inputListValues) )
         popupAddCard.close()
 
       })
@@ -170,12 +155,14 @@ buttonEditProfile.addEventListener('click', () => {
 buttonEditAvatar.addEventListener('click', () => {
   popupEditAvatar.open()
 
-  formEditProfileValidation.hideValidationErrors();
+  formEditAvatarValidation.hideValidationErrors();
+  formEditAvatarValidation.disableButton();
 })
 
 // ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
 buttonAddCard.addEventListener('click', () => {
   popupAddCard.open();
+  popupAddCard.changeSubmitButtonText('Создать');
 
   formAddCardValidation.hideValidationErrors();
   formAddCardValidation.disableButton();
