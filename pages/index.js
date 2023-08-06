@@ -55,11 +55,9 @@ Promise.all([
   const cardsList = new Section({
     renderer: () => {
       cardsArray.forEach(cardObj => {
-
-        const cardElement = createCardInstance(cardObj, userData);
-        cardsList.addItem( cardElement );
-
+        cardsList.addItem( createCardInstance(cardObj, userData) );
       })
+
     }
   }, '#gallery-list')
 
@@ -68,13 +66,10 @@ Promise.all([
   // ПОПАП НОВОЙ КАРТОЧКИ
   const popupAddCard = new PopupWithForm({
     formSubmitCallback: (inputListValues) => {
-
       api.addNewCard(inputListValues)
-        .then(() => {
-
-          cardsList.addItem( createCardInstance(inputListValues, userData) )
+        .then(newCardData => {
+          cardsList.addItem( createCardInstance(newCardData, userData) )
           popupAddCard.close()
-
         })
         .catch(err => { console.log(err); })
     }
@@ -138,11 +133,15 @@ function createCardInstance(cardData, userData) {
       popupWithImage.open(cardData);
 
     },
-    handleCardLike: (buttonLike, cardData) => {
+    handleCardLike: (buttonLike, likesCounter, cardData) => {
       if (buttonLike.classList.contains('card__like-btn_active')) {
         api.unlikeCard(cardData._id)
           .then(cardDataResponse => {
-            newCard.querySelector('.card__likes').textContent = cardDataResponse.likes.length;
+            if (cardDataResponse.likes.length === 0) {
+              likesCounter.textContent = '';
+            } else {
+              likesCounter.textContent = cardDataResponse.likes.length;
+            }
           })
           .then(() => {
             buttonLike.classList.remove('card__like-btn_active');
@@ -150,14 +149,14 @@ function createCardInstance(cardData, userData) {
       } else {
         api.likeCard(cardData._id)
           .then(cardDataResponse => {
-            newCard.querySelector('.card__likes').textContent = cardDataResponse.likes.length;
+            likesCounter.textContent = cardDataResponse.likes.length;
           })
           .then(() => {
             buttonLike.classList.add('card__like-btn_active');
           })
       }
     },
-    handleCardDelete: (cardData) => {
+    handleCardDelete: (cardElement, cardData) => {
       // ПОПАП УДАЛЕНИЯ КАРТОЧКИ
       const popupDeleteCard = new PopupWithSubmit({
 
@@ -166,7 +165,7 @@ function createCardInstance(cardData, userData) {
 
           api.deleteCard(cardData._id);
 
-          newCard.remove();
+          cardElement.remove();
           popupDeleteCard.close()
         }
 
@@ -204,8 +203,6 @@ buttonEditAvatar.addEventListener('click', () => {
   formEditAvatarValidation.hideValidationErrors();
   formEditAvatarValidation.disableButton();
 })
-
-
 
 // ВАЛИДАЦИЯ ФОРМ
 formEditProfileValidation.enableValidation();

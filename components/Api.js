@@ -61,6 +61,7 @@ export default class Api {
       },
       body: JSON.stringify(cardDataObj)
     })
+      .then(response => this._getResponseData(response))
   }
 
   deleteCard(id) {
