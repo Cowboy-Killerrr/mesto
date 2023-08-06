@@ -35,6 +35,11 @@ const formSelectors = {
   inputErrorText: ".form__input-error",
 }
 
+// ЭКЗЕМПЛЯРЫ КЛАССА ВАЛИДАЦИИ
+const formEditProfileValidation = new FormValidator(formSelectors, formEditProfile);
+const formEditAvatarValidation = new FormValidator(formSelectors, formEditAvatar);
+const formAddCardValidation = new FormValidator(formSelectors, formAddCard);
+
 // API
 const api = new Api({
   url: 'https://mesto.nomoreparties.co/v1/cohort-72',
@@ -51,6 +56,10 @@ Promise.all([
   const userData = dataArr[0];
   const cardsArray = dataArr[1];
 
+  // ПОЛУЧИТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЕ
+  const userInfo = new UserInfo();
+  userInfo.setUserInfo(userData);
+
   // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
   const cardsList = new Section({
     renderer: () => {
@@ -62,6 +71,20 @@ Promise.all([
   }, '#gallery-list')
 
   cardsList.renderItems();
+
+  // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+  const popupEditProfile = new PopupWithForm({
+    formSubmitCallback: (inputListValues) => {
+
+      api.editUserInfo( inputListValues )
+        .then(() => {
+          userInfo.insertUserInfo( inputListValues );
+          popupEditProfile.close()
+        })
+        .catch(err => { console.log(err); })
+
+    }
+  },'#popup-edit-profile');
 
   // ПОПАП НОВОЙ КАРТОЧКИ
   const popupAddCard = new PopupWithForm({
@@ -75,6 +98,36 @@ Promise.all([
     }
   },'#popup-add-card');
 
+  // ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
+  const popupEditAvatar = new PopupWithForm({
+    formSubmitCallback: (inputListValues) => {
+
+      api.editUserAvatar(inputListValues)
+        .then(() => {
+          userInfo.changeUserAvatar(inputListValues.avatar);
+        })
+        .catch(err => { console.log(err); })
+
+      popupEditAvatar.close()
+    }
+  },'#popup-edit-avatar');
+
+  // ПОПАП ПРОСМОТРА КАРТИНКИ
+  const popupWithImage = new PopupWithImage('#popup-view-image');
+
+  // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+  buttonEditProfile.addEventListener('click', () => {
+    popupEditProfile.open();
+
+    formEditProfileValidation.hideValidationErrors();
+    formEditProfileValidation.enableButton();
+
+    const currentUserInfo = userInfo.getUserInfo();
+
+    inputName.value = currentUserInfo.name;
+    inputJob.value = currentUserInfo.about;
+  });
+
   // ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
   buttonAddCard.addEventListener('click', () => {
     popupAddCard.open();
@@ -83,130 +136,78 @@ Promise.all([
     formAddCardValidation.hideValidationErrors();
     formAddCardValidation.disableButton();
   });
-})
 
-// ЭКХЕМПЛЯРЫ КЛАССА ВАЛИДАЦИИ
-const formEditProfileValidation = new FormValidator(formSelectors, formEditProfile);
-const formEditAvatarValidation = new FormValidator(formSelectors, formEditAvatar);
-const formAddCardValidation = new FormValidator(formSelectors, formAddCard);
+  // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
+  buttonEditAvatar.addEventListener('click', () => {
+    popupEditAvatar.open()
 
-// ПОЛУЧИТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЕ
-const userInfo = new UserInfo();
-userInfo.setUserInfo();
+    formEditAvatarValidation.hideValidationErrors();
+    formEditAvatarValidation.disableButton();
+  })
 
-// ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-const popupEditProfile = new PopupWithForm({
-  formSubmitCallback: (inputListValues) => {
+  // ВАЛИДАЦИЯ ФОРМ
+  formEditProfileValidation.enableValidation();
+  formEditAvatarValidation.enableValidation();
+  formAddCardValidation.enableValidation();
 
-    api.editUserInfo( inputListValues )
-      .then(() => {
-        userInfo.insertUserInfo( inputListValues );
-        popupEditProfile.close()
-      })
-      .catch(err => { console.log(err); })
+  // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
+  function createCardInstance(cardData, userData) {
+    const newCard = new Card(cardData, userData, {
+      handleCardClick: () => {
 
-  }
-},'#popup-edit-profile');
+        popupWithImage.open(cardData);
 
-// ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
-const popupEditAvatar = new PopupWithForm({
-  formSubmitCallback: (inputListValues) => {
-
-    api.editUserAvatar(inputListValues)
-      .then(() => {
-        userInfo.changeUserAvatar(inputListValues.avatar);
-      })
-      .catch(err => { console.log(err); })
-
-    popupEditAvatar.close()
-  }
-},'#popup-edit-avatar');
-
-// ПОПАП ПРОСМОТРА КАРТИНКИ
-const popupWithImage = new PopupWithImage('#popup-view-image');
-
-// ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
-function createCardInstance(cardData, userData) {
-  const newCard = new Card(cardData, userData, {
-    handleCardClick: () => {
-
-      popupWithImage.open(cardData);
-
-    },
-    handleCardLike: (buttonLike, likesCounter, cardData) => {
-      if (buttonLike.classList.contains('card__like-btn_active')) {
-        api.unlikeCard(cardData._id)
-          .then(cardDataResponse => {
-            if (cardDataResponse.likes.length === 0) {
-              likesCounter.textContent = '';
-            } else {
+      },
+      handleCardLike: (buttonLike, likesCounter, cardData) => {
+        if (buttonLike.classList.contains('card__like-btn_active')) {
+          api.unlikeCard(cardData._id)
+            .then(cardDataResponse => {
+              if (cardDataResponse.likes.length === 0) {
+                likesCounter.textContent = '';
+              } else {
+                likesCounter.textContent = cardDataResponse.likes.length;
+              }
+            })
+            .then(() => {
+              buttonLike.classList.remove('card__like-btn_active');
+            })
+        } else {
+          api.likeCard(cardData._id)
+            .then(cardDataResponse => {
               likesCounter.textContent = cardDataResponse.likes.length;
-            }
-          })
-          .then(() => {
-            buttonLike.classList.remove('card__like-btn_active');
-          })
-      } else {
-        api.likeCard(cardData._id)
-          .then(cardDataResponse => {
-            likesCounter.textContent = cardDataResponse.likes.length;
-          })
-          .then(() => {
-            buttonLike.classList.add('card__like-btn_active');
-          })
-      }
-    },
-    handleCardDelete: (cardElement, cardData) => {
-      // ПОПАП УДАЛЕНИЯ КАРТОЧКИ
-      const popupDeleteCard = new PopupWithSubmit({
-
-        formSubmitCallback: (event) => {
-          event.preventDefault();
-
-          api.deleteCard(cardData._id);
-
-          cardElement.remove();
-          popupDeleteCard.close()
+            })
+            .then(() => {
+              buttonLike.classList.add('card__like-btn_active');
+            })
         }
+      },
+      handleCardDelete: (cardElement, cardData) => {
+        // ПОПАП УДАЛЕНИЯ КАРТОЧКИ
+        const popupDeleteCard = new PopupWithSubmit({
 
-      }, '#popup-delete-card')
+          formSubmitCallback: (event) => {
+            event.preventDefault();
 
-      popupDeleteCard.open();
-    },
-    checkDeleteAccess: (buttonElement) => {
-      if (userData._id != cardData.owner._id) {
-        buttonElement.remove();
+            api.deleteCard(cardData._id);
+
+            cardElement.remove();
+            popupDeleteCard.close()
+          }
+
+        }, '#popup-delete-card')
+
+        popupDeleteCard.open();
+      },
+      checkDeleteAccess: (buttonElement) => {
+        if (userData._id != cardData.owner._id) {
+          buttonElement.remove();
+        }
       }
-    }
-  }, '#card-template');
+    }, '#card-template');
 
-  return newCard.createCard();
-}
-
-// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-buttonEditProfile.addEventListener('click', () => {
-  popupEditProfile.open();
-
-  formEditProfileValidation.hideValidationErrors();
-  formEditProfileValidation.enableButton();
-
-  const currentUserInfo = userInfo.getUserInfo();
-
-  inputName.value = currentUserInfo.name;
-  inputJob.value = currentUserInfo.about;
-});
-
-// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
-buttonEditAvatar.addEventListener('click', () => {
-  popupEditAvatar.open()
-
-  formEditAvatarValidation.hideValidationErrors();
-  formEditAvatarValidation.disableButton();
+    return newCard.createCard();
+  }
 })
-
-// ВАЛИДАЦИЯ ФОРМ
-formEditProfileValidation.enableValidation();
-formEditAvatarValidation.enableValidation();
-formAddCardValidation.enableValidation();
+  .catch(err => { console.log(err); })
 
 export { api };
