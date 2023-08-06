@@ -208,5 +208,6 @@ Promise.all([
     return newCard.createCard();
   }
 })
+  .catch(err => { console.log(err); })
 
 export { api };
