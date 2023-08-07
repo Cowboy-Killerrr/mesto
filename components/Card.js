@@ -62,7 +62,7 @@ export default class Card {
   _setLikeButtonState(cardData, currentUserId) {
     cardData.likes.forEach(user => {
       if (user._id === currentUserId) {
-        this._element.querySelector('.card__like-btn').classList.add('card__like-btn_active')
+        this._buttonLikeElement.classList.add('card__like-btn_active')
       }
     })
   }

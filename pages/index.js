@@ -46,45 +46,31 @@ const api = new Api({
   token: '4de05b98-5a9e-448b-915c-192900b934bb'
 })
 
+// ЭКЗЕМПЛЯР КЛАССА ДАННЫХ ПОЛЬЗОВАТЕЛЯ
+const userInfo = new UserInfo();
+
+// ЭКЗЕМПЛЯР КЛАССА СПИСКА КАРОТЧЕК
+const cardsList = new Section({
+  renderer: (cardObj, userData) => {
+    cardsList.addItem( createCardInstance(cardObj, userData) );
+  }
+}, '#gallery-list')
+
+// ЗАПРОСЫ НА СЕРВЕР
 Promise.all([
 
   api.getUserData(),
   api.getInitialCards()
 
-]).then(dataArr => {
-
-  const userData = dataArr[0];
-  const cardsArray = dataArr[1];
+]).then(dataArray => {
+  const userData = dataArray[0];
+  const cardsArray = dataArray[1];
 
   // ПОЛУЧИТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЕ
-  const userInfo = new UserInfo();
   userInfo.setUserInfo(userData);
 
   // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-  const cardsList = new Section({
-    renderer: () => {
-      cardsArray.forEach(cardObj => {
-        cardsList.addItem( createCardInstance(cardObj, userData) );
-      })
-
-    }
-  }, '#gallery-list')
-
-  cardsList.renderItems();
-
-  // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-  const popupEditProfile = new PopupWithForm({
-    formSubmitCallback: (inputListValues) => {
-
-      api.editUserInfo( inputListValues )
-        .then(() => {
-          userInfo.insertUserInfo( inputListValues );
-          popupEditProfile.close()
-        })
-        .catch(err => { console.log(err); })
-
-    }
-  },'#popup-edit-profile');
+  cardsList.renderItems(cardsArray, userData);
 
   // ПОПАП НОВОЙ КАРТОЧКИ
   const popupAddCard = new PopupWithForm({
@@ -98,36 +84,6 @@ Promise.all([
     }
   },'#popup-add-card');
 
-  // ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
-  const popupEditAvatar = new PopupWithForm({
-    formSubmitCallback: (inputListValues) => {
-
-      api.editUserAvatar(inputListValues)
-        .then(() => {
-          userInfo.changeUserAvatar(inputListValues.avatar);
-        })
-        .catch(err => { console.log(err); })
-
-      popupEditAvatar.close()
-    }
-  },'#popup-edit-avatar');
-
-  // ПОПАП ПРОСМОТРА КАРТИНКИ
-  const popupWithImage = new PopupWithImage('#popup-view-image');
-
-  // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-  buttonEditProfile.addEventListener('click', () => {
-    popupEditProfile.open();
-
-    formEditProfileValidation.hideValidationErrors();
-    formEditProfileValidation.enableButton();
-
-    const currentUserInfo = userInfo.getUserInfo();
-
-    inputName.value = currentUserInfo.name;
-    inputJob.value = currentUserInfo.about;
-  });
-
   // ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
   buttonAddCard.addEventListener('click', () => {
     popupAddCard.open();
@@ -136,78 +92,122 @@ Promise.all([
     formAddCardValidation.hideValidationErrors();
     formAddCardValidation.disableButton();
   });
-
-  // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
-  buttonEditAvatar.addEventListener('click', () => {
-    popupEditAvatar.open()
-
-    formEditAvatarValidation.hideValidationErrors();
-    formEditAvatarValidation.disableButton();
-  })
-
-  // ВАЛИДАЦИЯ ФОРМ
-  formEditProfileValidation.enableValidation();
-  formEditAvatarValidation.enableValidation();
-  formAddCardValidation.enableValidation();
-
-  // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
-  function createCardInstance(cardData, userData) {
-    const newCard = new Card(cardData, userData, {
-      handleCardClick: () => {
-
-        popupWithImage.open(cardData);
-
-      },
-      handleCardLike: (buttonLike, likesCounter, cardData) => {
-        if (buttonLike.classList.contains('card__like-btn_active')) {
-          api.unlikeCard(cardData._id)
-            .then(cardDataResponse => {
-              if (cardDataResponse.likes.length === 0) {
-                likesCounter.textContent = '';
-              } else {
-                likesCounter.textContent = cardDataResponse.likes.length;
-              }
-            })
-            .then(() => {
-              buttonLike.classList.remove('card__like-btn_active');
-            })
-        } else {
-          api.likeCard(cardData._id)
-            .then(cardDataResponse => {
-              likesCounter.textContent = cardDataResponse.likes.length;
-            })
-            .then(() => {
-              buttonLike.classList.add('card__like-btn_active');
-            })
-        }
-      },
-      handleCardDelete: (cardElement, cardData) => {
-        // ПОПАП УДАЛЕНИЯ КАРТОЧКИ
-        const popupDeleteCard = new PopupWithSubmit({
-
-          formSubmitCallback: (event) => {
-            event.preventDefault();
-
-            api.deleteCard(cardData._id);
-
-            cardElement.remove();
-            popupDeleteCard.close()
-          }
-
-        }, '#popup-delete-card')
-
-        popupDeleteCard.open();
-      },
-      checkDeleteAccess: (buttonElement) => {
-        if (userData._id != cardData.owner._id) {
-          buttonElement.remove();
-        }
-      }
-    }, '#card-template');
-
-    return newCard.createCard();
-  }
 })
   .catch(err => { console.log(err); })
+
+// ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+const popupEditProfile = new PopupWithForm({
+  formSubmitCallback: (inputListValues) => {
+
+    api.editUserInfo( inputListValues )
+      .then(() => {
+        userInfo.insertUserInfo( inputListValues );
+        popupEditProfile.close()
+      })
+      .catch(err => { console.log(err); })
+
+  }
+},'#popup-edit-profile');
+
+// ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
+const popupEditAvatar = new PopupWithForm({
+  formSubmitCallback: (inputListValues) => {
+
+    api.editUserAvatar(inputListValues)
+      .then(() => {
+        userInfo.changeUserAvatar(inputListValues.avatar);
+      })
+      .catch(err => { console.log(err); })
+
+    popupEditAvatar.close()
+  }
+},'#popup-edit-avatar');
+
+// ПОПАП ПРОСМОТРА КАРТИНКИ
+const popupWithImage = new PopupWithImage('#popup-view-image');
+
+// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+buttonEditProfile.addEventListener('click', () => {
+  popupEditProfile.open();
+
+  formEditProfileValidation.hideValidationErrors();
+  formEditProfileValidation.enableButton();
+
+  const currentUserInfo = userInfo.getUserInfo();
+
+  inputName.value = currentUserInfo.name;
+  inputJob.value = currentUserInfo.about;
+});
+
+// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
+buttonEditAvatar.addEventListener('click', () => {
+  popupEditAvatar.open()
+
+  formEditAvatarValidation.hideValidationErrors();
+  formEditAvatarValidation.disableButton();
+})
+
+// ВАЛИДАЦИЯ ФОРМ
+formEditProfileValidation.enableValidation();
+formEditAvatarValidation.enableValidation();
+formAddCardValidation.enableValidation();
+
+// ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
+function createCardInstance(cardData, userData) {
+  const newCard = new Card(cardData, userData, {
+    handleCardClick: () => {
+
+      popupWithImage.open(cardData);
+
+    },
+    handleCardLike: (buttonLike, likesCounter, cardData) => {
+      if (buttonLike.classList.contains('card__like-btn_active')) {
+        api.unlikeCard(cardData._id)
+          .then(cardDataResponse => {
+            if (cardDataResponse.likes.length === 0) {
+              likesCounter.textContent = '';
+            } else {
+              likesCounter.textContent = cardDataResponse.likes.length;
+            }
+          })
+          .then(() => {
+            buttonLike.classList.remove('card__like-btn_active');
+          })
+      } else {
+        api.likeCard(cardData._id)
+          .then(cardDataResponse => {
+            likesCounter.textContent = cardDataResponse.likes.length;
+          })
+          .then(() => {
+            buttonLike.classList.add('card__like-btn_active');
+          })
+      }
+    },
+    handleCardDelete: (cardElement, cardData) => {
+      // ПОПАП УДАЛЕНИЯ КАРТОЧКИ
+      const popupDeleteCard = new PopupWithSubmit({
+
+        formSubmitCallback: (event) => {
+          event.preventDefault();
+
+          api.deleteCard(cardData._id);
+
+          cardElement.remove();
+          popupDeleteCard.close()
+        }
+
+      }, '#popup-delete-card')
+
+      popupDeleteCard.open();
+    },
+    checkDeleteAccess: (buttonElement) => {
+      if (userData._id != cardData.owner._id) {
+        buttonElement.remove();
+      }
+    }
+  }, '#card-template');
+
+  return newCard.createCard();
+}
 
 export { api };

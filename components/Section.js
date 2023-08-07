@@ -12,8 +12,10 @@ export default class Section {
     this._container.innerHTML = '';
   }
 
-  renderItems() {
-    this.clear();
-    this._renderer()
+  renderItems(cardsArray, userData) {
+    // this.clear();
+    cardsArray.forEach(cardObj => {
+      this._renderer(cardObj, userData);
+    });
   }
 }
