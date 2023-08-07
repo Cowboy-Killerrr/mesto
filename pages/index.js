@@ -139,19 +139,6 @@ buttonEditProfile.addEventListener('click', () => {
   inputJob.value = currentUserInfo.about;
 });
 
-// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
-buttonEditAvatar.addEventListener('click', () => {
-  popupEditAvatar.open()
-
-  formEditAvatarValidation.hideValidationErrors();
-  formEditAvatarValidation.disableButton();
-})
-
-// ВАЛИДАЦИЯ ФОРМ
-formEditProfileValidation.enableValidation();
-formEditAvatarValidation.enableValidation();
-formAddCardValidation.enableValidation();
-
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
 function createCardInstance(cardData, userData) {
   const newCard = new Card(cardData, userData, {
@@ -206,5 +193,20 @@ function createCardInstance(cardData, userData) {
 
   return newCard.createCard();
 }
+
+// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
+buttonEditAvatar.addEventListener('click', () => {
+  popupEditAvatar.open()
+
+  formEditAvatarValidation.hideValidationErrors();
+  formEditAvatarValidation.disableButton();
+})
+
+// ВАЛИДАЦИЯ ФОРМ
+formEditProfileValidation.enableValidation();
+formEditAvatarValidation.enableValidation();
+formAddCardValidation.enableValidation();
+
+
 
 export { api };
