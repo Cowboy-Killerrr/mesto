@@ -160,39 +160,36 @@ function createCardInstance(cardData, userData) {
       popupWithImage.open(cardData);
 
     },
-    handleCardLike: (buttonLike, likesCounter, cardData) => {
-      if (buttonLike.classList.contains('card__like-btn_active')) {
+    handleCardLike: (cardData) => {
+      if ( newCard.isButtonLikeActive() ) {
         api.unlikeCard(cardData._id)
           .then(cardDataResponse => {
-            if (cardDataResponse.likes.length === 0) {
-              likesCounter.textContent = '';
-            } else {
-              likesCounter.textContent = cardDataResponse.likes.length;
-            }
+            newCard.setLikesNumber(cardDataResponse)
           })
           .then(() => {
-            buttonLike.classList.remove('card__like-btn_active');
+            newCard.setButtonLikeInactive();
           })
       } else {
         api.likeCard(cardData._id)
           .then(cardDataResponse => {
-            likesCounter.textContent = cardDataResponse.likes.length;
+            newCard.setLikesNumber(cardDataResponse)
           })
           .then(() => {
-            buttonLike.classList.add('card__like-btn_active');
+            newCard.setButtonLikeActive()
           })
       }
     },
-    handleCardDelete: (cardElement, cardData) => {
+    handleCardDelete: (cardData) => {
       // ПОПАП УДАЛЕНИЯ КАРТОЧКИ
       const popupDeleteCard = new PopupWithSubmit({
 
         formSubmitCallback: (event) => {
           event.preventDefault();
 
-          api.deleteCard(cardData._id);
+          api.deleteCard(cardData._id)
+            .catch(err => { console.log(err); })
 
-          cardElement.remove();
+          newCard.removeCardElement();
           popupDeleteCard.close()
         }
 
@@ -200,9 +197,9 @@ function createCardInstance(cardData, userData) {
 
       popupDeleteCard.open();
     },
-    checkDeleteAccess: (buttonElement) => {
+    checkDeleteAccess: () => {
       if (userData._id != cardData.owner._id) {
-        buttonElement.remove();
+        newCard.removeButtonDeleteElement();
       }
     }
   }, '#card-template');
