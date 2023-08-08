@@ -35,6 +35,9 @@ const formSelectors = {
   inputErrorText: ".form__input-error",
 }
 
+// ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ ДЛЯ ХРАНЕНИЯ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
+let userData = null;
+
 // ЭКЗЕМПЛЯРЫ КЛАССА ВАЛИДАЦИИ
 const formEditProfileValidation = new FormValidator(formSelectors, formEditProfile);
 const formEditAvatarValidation = new FormValidator(formSelectors, formEditAvatar);
@@ -62,36 +65,15 @@ Promise.all([
   api.getUserData(),
   api.getInitialCards()
 
-]).then(dataArray => {
-  const userData = dataArray[0];
-  const cardsArray = dataArray[1];
+]).then(([user, cards]) => {
+
+  userData = user;
 
   // ПОЛУЧИТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЕ
-  userInfo.setUserInfo(userData);
+  userInfo.setUserInfo(user);
 
   // ОТРИСОВКА КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-  cardsList.renderItems(cardsArray, userData);
-
-  // ПОПАП НОВОЙ КАРТОЧКИ
-  const popupAddCard = new PopupWithForm({
-    formSubmitCallback: (inputListValues) => {
-      api.addNewCard(inputListValues)
-        .then(newCardData => {
-          cardsList.addItem( createCardInstance(newCardData, userData) )
-          popupAddCard.close()
-        })
-        .catch(err => { console.log(err); })
-    }
-  },'#popup-add-card');
-
-  // ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
-  buttonAddCard.addEventListener('click', () => {
-    popupAddCard.open();
-    popupAddCard.changeSubmitButtonText('Создать');
-
-    formAddCardValidation.hideValidationErrors();
-    formAddCardValidation.disableButton();
-  });
+  cardsList.renderItems(cards, user);
 })
   .catch(err => { console.log(err); })
 
@@ -109,6 +91,18 @@ const popupEditProfile = new PopupWithForm({
   }
 },'#popup-edit-profile');
 
+// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
+const popupAddCard = new PopupWithForm({
+  formSubmitCallback: (inputListValues) => {
+    api.addNewCard(inputListValues)
+      .then(newCardData => {
+        cardsList.addItem( createCardInstance(newCardData, userData) )
+        popupAddCard.close()
+      })
+      .catch(err => { console.log(err); })
+  }
+},'#popup-add-card');
+
 // ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
 const popupEditAvatar = new PopupWithForm({
   formSubmitCallback: (inputListValues) => {
@@ -125,19 +119,6 @@ const popupEditAvatar = new PopupWithForm({
 
 // ПОПАП ПРОСМОТРА КАРТИНКИ
 const popupWithImage = new PopupWithImage('#popup-view-image');
-
-// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-buttonEditProfile.addEventListener('click', () => {
-  popupEditProfile.open();
-
-  formEditProfileValidation.hideValidationErrors();
-  formEditProfileValidation.enableButton();
-
-  const currentUserInfo = userInfo.getUserInfo();
-
-  inputName.value = currentUserInfo.name;
-  inputJob.value = currentUserInfo.about;
-});
 
 // ФУНКЦИЯ СОЗДАНИЯ ЭКЗЕМПЛЯРА КЛАССА CARD
 function createCardInstance(cardData, userData) {
@@ -194,6 +175,28 @@ function createCardInstance(cardData, userData) {
   return newCard.createCard();
 }
 
+// ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+buttonEditProfile.addEventListener('click', () => {
+  popupEditProfile.open();
+
+  formEditProfileValidation.hideValidationErrors();
+  formEditProfileValidation.enableButton();
+
+  const currentUserInfo = userInfo.getUserInfo();
+
+  inputName.value = currentUserInfo.name;
+  inputJob.value = currentUserInfo.about;
+});
+
+// ОТКРЫТЬ ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ
+buttonAddCard.addEventListener('click', () => {
+  popupAddCard.open();
+  popupAddCard.changeSubmitButtonText('Создать');
+
+  formAddCardValidation.hideValidationErrors();
+  formAddCardValidation.disableButton();
+});
+
 // ОТКРЫТЬ ПОПАП РЕДАКТИРОВАНИЯ АВАТАРКИ
 buttonEditAvatar.addEventListener('click', () => {
   popupEditAvatar.open()
@@ -206,7 +209,5 @@ buttonEditAvatar.addEventListener('click', () => {
 formEditProfileValidation.enableValidation();
 formEditAvatarValidation.enableValidation();
 formAddCardValidation.enableValidation();
-
-
 
 export { api };
